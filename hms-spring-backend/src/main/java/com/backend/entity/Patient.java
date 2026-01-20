@@ -7,19 +7,16 @@ import lombok.*;
 
 @Entity
 @Table(name="patient")
+@AttributeOverride(
+	    name = "userId",
+	    column = @Column(name = "patient_id")
+	)
 @Getter
 @Setter
 @NoArgsConstructor
-
-public class Patient {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="patient_id")
-	private Integer patientId;
+@AllArgsConstructor
+public class Patient extends BaseUser {
 	
-	@OneToOne
-	@JoinColumn(name="user_id")
-	private BaseUser user;
 	@Column(name="admit_Date")
 	private LocalDateTime admitDate;
 	@Column(name="discharge_Date")

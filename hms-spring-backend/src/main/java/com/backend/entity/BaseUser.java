@@ -21,13 +21,19 @@ public abstract class BaseUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @Column(nullable = false, length = 100)
     private String username;
 
     @Column(nullable = false, length = 100)
     private String password;
+    
+    @Column(nullable=false,length=100)
+    private String firstname;
+    
+    @Column(nullable=false, length=100)
+    private String lastname;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

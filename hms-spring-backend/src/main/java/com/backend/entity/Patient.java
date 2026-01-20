@@ -16,9 +16,14 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Patient extends BaseUser {
-	
+	@Column(name="bloodGroup")
+	private BloodGroup bloodGroup;
+	@Column(name = "Medical_history", length = 500)
+	private String medicalHistory;
 	@Column(name="admit_Date")
 	private LocalDateTime admitDate;
 	@Column(name="discharge_Date")
 	private LocalDateTime dischargeDate;
+	
+	
 }

@@ -7,15 +7,19 @@ import lombok.*;
 
 @Entity
 @Table(name="patient")
-@AttributeOverride(
-	    name = "userId",
-	    column = @Column(name = "patient_id")
-	)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Patient extends BaseUser {
+public class Patient {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "patient_id")
+	private Long patientId;
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false, unique = true)
+	private User user;
+	@Enumerated(EnumType.STRING)
 	@Column(name="bloodGroup")
 	private BloodGroup bloodGroup;
 	@Column(name = "Medical_history", length = 500)
@@ -24,6 +28,4 @@ public class Patient extends BaseUser {
 	private LocalDateTime admitDate;
 	@Column(name="discharge_Date")
 	private LocalDateTime dischargeDate;
-	
-	
 }

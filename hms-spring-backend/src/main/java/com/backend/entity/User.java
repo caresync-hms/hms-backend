@@ -10,18 +10,14 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
+@Entity
+@Table(name="user")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@MappedSuperclass
-public abstract class BaseUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
+public class User extends Base {
 
     @Column(nullable = false, length = 100)
     private String username;
@@ -58,14 +54,6 @@ public abstract class BaseUser {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
-
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
     
     @PrePersist
     protected void setDefaults() {

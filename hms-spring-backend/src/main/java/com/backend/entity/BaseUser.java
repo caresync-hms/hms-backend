@@ -32,6 +32,13 @@ public abstract class BaseUser {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
+    private Gender gender;
+    
+    @Column(name="dob",nullable=false)
+    private LocalDateTime dob;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
@@ -53,6 +60,16 @@ public abstract class BaseUser {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    
+    @PrePersist
+    protected void setDefaults() {
+        if (this.role == null) {
+            this.role = Role.PATIENT;
+        }
+        if (this.status == null) {
+            this.status = Status.ACTIVE;
+        }
+    }
 }
 
 

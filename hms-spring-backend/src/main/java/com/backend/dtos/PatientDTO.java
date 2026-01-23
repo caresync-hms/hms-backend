@@ -23,7 +23,7 @@ public class PatientDTO {
     private String medicalHistory;
 
     public PatientDTO(Patient patient) {
-        this.id = patient.getPatientId();
+//        this.id = patient.getPatientId();
         this.firstName = patient.getUser().getFirstname();
         this.lastName = patient.getUser().getLastname();
         this.gender = patient.getUser().getGender();

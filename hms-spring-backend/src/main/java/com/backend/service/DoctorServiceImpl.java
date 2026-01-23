@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import java.util.List;
 import java.util.Optional;
 import com.backend.repository.AppointmentRepo;
 
@@ -15,9 +16,9 @@ public class DoctorServiceImpl implements DoctorService  {
 @Autowired 
 public AppointmentRepo appointment; 
 	@Override
-	public Optional<Appointment> getPatientDetailsByDoctorId(Long userId) {
+	public List<Appointment> getAppointmentDetailsByDoctorId(Long userId) {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		return appointment.findByDoctorId(userId);
 	}
 
 }

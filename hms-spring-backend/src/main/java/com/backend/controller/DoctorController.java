@@ -24,22 +24,11 @@ import com.backend.service.DoctorService;
 public class DoctorController {
 	@Autowired
 	public DoctorService doctorService ;
-//	@GetMapping("/{userid}")
-//	public ResponseEntity<?> getPatientDetails(@PathVariable Long userid){
-//		try {
-//			return ResponseEntity.ok(doctorService.getAppointmentDetailsByDoctorId(userid));
-//		}catch(RuntimeException e) {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//					.body(new ApiResponse(e.getMessage(),"Failed"));
-//		}
-//	}
-	
-	  @GetMapping("/{doctorId}/appointments")
-	    public ResponseEntity<List<Appointment>> getAppointments(
-	            @PathVariable Long doctorId) {
 
-	        return ResponseEntity.ok(
-	                doctorService.getAppointmentDetailsByDoctorId(doctorId)
-	        );
-	    }
+	@GetMapping("/{doctorId}/appointments")
+	public ResponseEntity<?> getAppointments(@PathVariable Long doctorId) {
+	    return ResponseEntity.ok(
+	        doctorService.getAppointmentsByDoctorId(doctorId)
+	    );
+	}
 }

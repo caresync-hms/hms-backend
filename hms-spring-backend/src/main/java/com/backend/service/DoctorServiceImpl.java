@@ -1,24 +1,27 @@
 package com.backend.service;
 
+
 import java.util.List;
-import java.util.Optional;
-import com.backend.repository.AppointmentRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.backend.entity.Appointment;
+
+import com.backend.dtos.AppointmentResponseDto;
+import com.backend.repository.AppointmentRepo;
+//import com.backend.repository.AppointmentRepository;
+import com.backend.service.DoctorService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
+public class DoctorServiceImpl implements DoctorService {
+	@Autowired
+    private  AppointmentRepo appointmentRepository;
 
-public class DoctorServiceImpl implements DoctorService  {
-@Autowired 
-public AppointmentRepo appointment; 
-	@Override
-	public List<Appointment> getAppointmentDetailsByDoctorId(Long userId) {
-		// TODO Auto-generated method stub
-		return appointment.findByDoctorId(userId);
-	}
-
+    @Override
+    public List<AppointmentResponseDto> getAppointmentsByDoctorId(Long doctorId) {
+        return appointmentRepository.findAppointmentsByDoctorId(doctorId);
+    }
 }
+

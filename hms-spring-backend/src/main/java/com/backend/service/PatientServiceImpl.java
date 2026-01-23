@@ -20,9 +20,9 @@ public class PatientServiceImpl implements PatientService{
 	private PatientRepository patientRepository;
 	
 	@Override
-	public PatientDTO getPatientDetailsByUserId(Long userId) {
+	public Optional<PatientDTO> getPatientDetailsByUserId(Long userId) {
 	
-		return patientRepository.findByUserId(userId);
+		return patientRepository.findByUserUserId(userId).map(PatientDTO::new);
 	}
 
 }

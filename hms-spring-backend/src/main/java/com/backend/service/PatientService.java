@@ -1,9 +1,12 @@
 package com.backend.service;
 
+import java.util.Optional;
+
 import com.backend.dtos.PatientDTO;
+import com.backend.entity.Patient;
 
 public interface PatientService {
 	
-	 PatientDTO getPatientDetailsByUserId(Long userId);
+	 Optional<PatientDTO> getPatientDetailsByUserId(Long userId);
 
 }

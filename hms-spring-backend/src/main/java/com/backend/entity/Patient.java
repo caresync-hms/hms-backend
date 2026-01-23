@@ -28,4 +28,5 @@ public class Patient {
 	private LocalDateTime admitDate;
 	@Column(name="discharge_Date")
 	private LocalDateTime dischargeDate;
+	
 }

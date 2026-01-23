@@ -19,15 +19,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PatientController {
 	@Autowired
-	private PatientService patientService;
+	private final PatientService patientService;
 	
-	@GetMapping("{userId}")
+	@GetMapping("/{userId}")
 	public ResponseEntity<?> getPatientDetails(@PathVariable Long userId){
-	try {
-		return ResponseEntity.ok(patientService.getPatientDetailsByUserId(userId));
-	}catch(RuntimeException e) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new ApiResponse(e.getMessage(),"Failed"));
+		try {
+			return ResponseEntity.ok(patientService.getPatientDetailsByUserId(userId));
+		}catch(RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ApiResponse(e.getMessage(),"Failed"));
+		}
 	}
-	}
+	
 }

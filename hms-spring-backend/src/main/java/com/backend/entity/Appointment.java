@@ -12,8 +12,8 @@ import jakarta.persistence.ManyToOne;
 
 @Entity 
 @AttributeOverride(
-	    name = "UserId",
-	    column = @Column(name = "appointment_id")
+	    name = "id",
+	    column = @Column(name = "app_id")
 	)
 public class Appointment extends Base  {
 @ManyToOne

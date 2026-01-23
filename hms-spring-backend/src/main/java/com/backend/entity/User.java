@@ -16,7 +16,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@AttributeOverride(name="userId", column = @Column(name="user_id"))
+@AttributeOverride(name="id", column = @Column(name="user_id"))
 public class User extends Base {
 
     @Column(nullable = false, length = 100)

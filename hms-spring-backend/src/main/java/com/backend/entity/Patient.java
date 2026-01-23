@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 
 @AttributeOverride(
-	    name = "UserId",
+	    name = "id",
 	    column = @Column(name = "patient_id")
 	)
 

@@ -9,7 +9,7 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 @AttributeOverride(
-	    name = "UserId",
+	    name = "id",
 	    column = @Column(name = "doctor_id")
 	)
 public class Doctor extends Base  {

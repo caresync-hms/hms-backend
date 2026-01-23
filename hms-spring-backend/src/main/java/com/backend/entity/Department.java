@@ -6,8 +6,8 @@ import jakarta.persistence.Entity;
 
 @Entity
 @AttributeOverride(
-	    name = "userID",
-	    column = @Column(name = "dept_id")
+	    name = "id",
+	    column = @Column(name = "deptId")
 	)
 public class Department extends Base  {
 	@Column(name="dept_name")

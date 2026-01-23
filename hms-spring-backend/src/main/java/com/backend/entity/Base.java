@@ -21,8 +21,7 @@ import lombok.Setter;
 public abstract class Base {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
+    private Long id;
 	
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

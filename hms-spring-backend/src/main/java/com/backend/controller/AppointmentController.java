@@ -3,6 +3,7 @@ package com.backend.controller;
 import com.backend.dtos.AppointmentBookingDto;
 import com.backend.dtos.AppointmentBookingRequestDto;
 import com.backend.dtos.AppointmentByPatientDto;
+import com.backend.dtos.AppointmentUpdateRequestDto;
 import com.backend.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +40,18 @@ public class AppointmentController {
         try {
             appointmentService.softDeleteAppointment(appointmentId);
             return ResponseEntity.ok("Appointment cancelled successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
+    @PutMapping("/update-date")
+    public ResponseEntity<?> updateAppointmentDate(
+            @RequestBody AppointmentUpdateRequestDto dto) {
+        try {
+            AppointmentBookingDto response =
+                    appointmentService.updateAppointmentDate(dto);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

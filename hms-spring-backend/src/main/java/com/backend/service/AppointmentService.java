@@ -6,6 +6,7 @@ import com.backend.dtos.AddAppointmentDto;
 import com.backend.dtos.AppointmentBookingDto;
 import com.backend.dtos.AppointmentBookingRequestDto;
 import com.backend.dtos.AppointmentByPatientDto;
+import com.backend.dtos.AppointmentUpdateRequestDto;
 import com.backend.dtos.PatientByDoctorDto;
 import com.backend.entity.Appointment;
 
@@ -16,4 +17,5 @@ public interface AppointmentService {
     List<AppointmentByPatientDto> getAllAppointmentsByPatientId(Long patientId);
     AppointmentBookingDto bookAppointment(AppointmentBookingRequestDto dto);
     void softDeleteAppointment(Long appointmentId);
+    AppointmentBookingDto updateAppointmentDate(AppointmentUpdateRequestDto dto);
 }

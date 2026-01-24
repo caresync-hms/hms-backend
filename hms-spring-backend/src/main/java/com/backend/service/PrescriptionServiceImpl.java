@@ -85,15 +85,25 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 		                 dto.setPatientId(p.getPatient().getId());
 		                 dto.setDateIssued(p.getIssueDate());
 		                 dto.setNotes(p.getAdvice());
-
 		                 return dto;
 		            } ).toList();
 	}
 
 	@Override
 	public List<PrescriptionRespDTO> getPrescriptionByPatient(Long patientId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Prescription> prescriptions=prescriptionRepository.findByPatientId(patientId);
+		return prescriptions.stream()
+	            .map(p -> {
+	                PrescriptionRespDTO dto = new PrescriptionRespDTO();
+	                dto.setPrescriptionId(p.getId());
+	                dto.setPatientId(p.getPatient().getId());
+	                dto.setDoctorId(p.getDoctor().getId());
+	                dto.setAppointmentId(p.getAppointment().getId());
+	                dto.setDateIssued(p.getIssueDate());
+	                dto.setNotes(p.getAdvice());
+	                return dto;
+	            })
+	            .toList();
 	}
 
 	@Override

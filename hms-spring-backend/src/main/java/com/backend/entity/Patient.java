@@ -11,11 +11,17 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Patient {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "patient_id")
-	private Long patientId;
+
+@AttributeOverride(
+	    name = "id",
+	    column = @Column(name = "patient_id")
+	)
+
+public class Patient extends Base  {
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Column(name = "patient_id")
+//	private Long patientId;
 	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private User user;

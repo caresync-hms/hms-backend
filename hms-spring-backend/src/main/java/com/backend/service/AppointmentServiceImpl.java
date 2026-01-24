@@ -116,49 +116,38 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         appointmentRepository.save(appointment);
     }
+
+	@Override
+	public AppointmentBookingDto updateAppointmentDate(AppointmentUpdateRequestDto dto) {
+		// TODO Auto-generated method stub
+		// 1️⃣ Find appointment by primary key
+	    Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
+	            .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+	    // 2️⃣ Update ONLY date (as per requirement)
+	    appointment.setDateOfAppointment(dto.getDateOfAppointment());
+
+	    // 3️⃣ Save
+	    Appointment updated = appointmentRepository.save(appointment);
+
+	    // 4️⃣ Prepare response DTO
+	    AppointmentBookingDto response = new AppointmentBookingDto();
+	    response.setPatientId(updated.getPatient().getId());
+	    response.setDoctorSpecialization(updated.getDoctor().getSpecilization());
+	    response.setDateOfApp(updated.getDateOfAppointment());
+	    response.setStatus(updated.getStatus());
+
+	    // doctor name (only if User exists)
+	    if (updated.getDoctor().getUser() != null) {
+	        response.setDoctorName(
+	            updated.getDoctor().getUser().getFirstname() + " " +
+	            updated.getDoctor().getUser().getLastname()
+	        );
+	    }
+
+	    return response;
+	}
     
     
-    @Override
-    public AppointmentBookingDto updateAppointmentDate(AppointmentUpdateRequestDto dto) {
-
-        Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
-
-        // ❌ Cannot update cancelled / blocked appointment
-        if (appointment.getStatus() == Status.INACTIVE || appointment.getStatus() == Status.BLOCKED) {
-            throw new RuntimeException("Cannot update this appointment");
-        }
-
-        // 🔁 Check doctor availability for new date
-        boolean isBooked = appointmentRepository
-                .existsByDoctor_IdAndDateOfAppointment(
-                        appointment.getDoctor().getId(),
-                        dto.getDateOfAppointment()
-                );
-
-        if (isBooked) {
-            throw new RuntimeException("Doctor not available at this time");
-        }
-
-        // ✅ Update only date
-        appointment.setDateOfAppointment(dto.getDateOfAppointment());
-
-        Appointment updated = appointmentRepository.save(appointment);
-
-        // 🔁 Build response
-        AppointmentBookingDto response = new AppointmentBookingDto();
-        response.setPatientId(updated.getPatient().getId());
-        response.setDoctorSpecialization(updated.getDoctor().getSpecilization());
-        response.setDateOfApp(updated.getDateOfAppointment());
-        response.setStatus(updated.getStatus());
-
-        User user = updated.getDoctor().getUser();
-        if (user != null) {
-            response.setDoctorName(user.getFirstname() + " " + user.getLastname());
-        }
-
-        return response;
-    }
-
     
 }

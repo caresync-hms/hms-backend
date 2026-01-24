@@ -42,10 +42,7 @@ public class DoctorController {
 	}
 	
 	
-	   @PostMapping("/add")
-	    public Appointment addAppointment(@RequestBody @Valid AddAppointmentDto dto) {
-	        return appointmentService.addAppointment(dto);
-	    }
+	
 	   
 	   
 	   @GetMapping("/doctor/{doctorId}/patients")

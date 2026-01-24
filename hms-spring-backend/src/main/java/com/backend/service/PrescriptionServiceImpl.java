@@ -62,14 +62,32 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 
 	@Override
 	public PrescriptionRespDTO getPrescriptionById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Prescription prescription=prescriptionRepository.findById(id).orElseThrow();
+		PrescriptionRespDTO resp=modelMapper.map(prescription,PrescriptionRespDTO.class);
+		resp.setPatientId(prescription.getPatient().getId());
+		resp.setDoctorId(prescription.getDoctor().getId());
+		resp.setPrescriptionId(id);
+		resp.setAppointmentId(prescription.getAppointment().getId());
+		resp.setDateIssued(prescription.getIssueDate());
+		resp.setNotes(prescription.getAdvice());
+		return resp;
 	}
 
 	@Override
 	public List<PrescriptionRespDTO> getAllPrescriptions() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Prescription> prescriptions=prescriptionRepository.findAll();
+		 return prescriptions.stream()
+		            .map(p ->{
+		            	 PrescriptionRespDTO dto = new PrescriptionRespDTO();
+		                 dto.setPrescriptionId(p.getId());
+		                 dto.setAppointmentId(p.getAppointment().getId());
+		                 dto.setDoctorId(p.getDoctor().getId());
+		                 dto.setPatientId(p.getPatient().getId());
+		                 dto.setDateIssued(p.getIssueDate());
+		                 dto.setNotes(p.getAdvice());
+
+		                 return dto;
+		            } ).toList();
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.backend.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,5 +31,10 @@ public class PrescriptionController {
 	@GetMapping("/{id}")
 	public PrescriptionRespDTO getPrescriptionById (@PathVariable Long id) {
 		return prescriptionService.getPrescriptionById(id);
+	}
+	
+	@GetMapping
+	public List<PrescriptionRespDTO> getAllPrescription(){
+		return prescriptionService.getAllPrescriptions();
 	}
 }

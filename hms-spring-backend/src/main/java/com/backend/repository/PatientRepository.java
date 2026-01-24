@@ -8,5 +8,5 @@ import com.backend.dtos.PatientDTO;
 import com.backend.entity.Patient;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-	 Optional<Patient> findByUserId(Long userId);
+	 Optional<Patient> findByUser_Id(Long userId);
 }

@@ -10,19 +10,16 @@ import com.backend.entity.Status;
 import com.backend.entity.User;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class PatientDTO {
-
-    private Long patientId;
-
+public class PatientRespDTO {
+	private Long patientId;
     private Long userId;
+
     private String firstname;
     private String lastname;
     private String email;
@@ -36,7 +33,7 @@ public class PatientDTO {
     private LocalDateTime admitDate;
     private LocalDateTime dischargeDate;
     
-    public PatientDTO(Patient patient) {
+    public PatientRespDTO(Patient patient) {
         this.patientId = patient.getId();
 
         User user = patient.getUser();
@@ -54,4 +51,6 @@ public class PatientDTO {
         this.admitDate = patient.getAdmitDate();
         this.dischargeDate = patient.getDischargeDate();
     }
+
+	
 }

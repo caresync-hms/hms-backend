@@ -1,5 +1,6 @@
 package com.backend.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,7 +41,7 @@ public class User extends Base {
     private Gender gender;
     
     @Column(name="dob",nullable=false)
-    private LocalDateTime dob;
+    private LocalDate dob;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;

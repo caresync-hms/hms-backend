@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -48,7 +49,7 @@ public class PatientServiceImpl implements PatientService{
 		resp.setEmail(user.getEmail());
 		resp.setPhone(user.getPhone());
 		resp.setGender(user.getGender());
-		resp.setDob(user.getDob().toLocalDate());
+		resp.setDob(user.getDob());
 		resp.setStatus(user.getStatus());
 		resp.setBloodGroup(savedPatient.getBloodGroup());
 		resp.setMedicalHistory(savedPatient.getMedicalHistory());
@@ -56,7 +57,39 @@ public class PatientServiceImpl implements PatientService{
 		resp.setDischargeDate(savedPatient.getDischargeDate());
 		return resp;
 	}
-	
+
+	@Override
+	public PatientRespDTO updatePatient(Long patientId, PatientReqDTO dto) {
+		Patient patient=patientRepository.findById(patientId).orElseThrow();
+		patient.setBloodGroup(dto.getBloodGroup());
+		patient.setMedicalHistory(dto.getMedicalHistory());
+        patient.setAdmitDate(dto.getAdmitDate());
+        patient.setDischargeDate(dto.getDischargeDate());
+        Patient updated = patientRepository.save(patient);
+        PatientRespDTO resp = new PatientRespDTO();
+        resp.setPatientId(updated.getId());
+        resp.setUserId(updated.getUser().getId());
+
+        resp.setFirstname(updated.getUser().getFirstname());
+        resp.setLastname(updated.getUser().getLastname());
+        resp.setEmail(updated.getUser().getEmail());
+        resp.setPhone(updated.getUser().getPhone());
+        resp.setGender(updated.getUser().getGender());
+        resp.setDob(updated.getUser().getDob());
+        resp.setStatus(updated.getUser().getStatus());
+
+        resp.setBloodGroup(updated.getBloodGroup());
+        resp.setMedicalHistory(updated.getMedicalHistory());
+        resp.setAdmitDate(updated.getAdmitDate());
+        resp.setDischargeDate(updated.getDischargeDate());
+		return resp;
+	}
+
+	@Override
+	public List<PatientRespDTO> getPatientsByDoctorId(Long doctorId) {
+		return patientRepository.findPatientsByDoctorId(doctorId).stream().map(p->modelMapper.map(p,PatientRespDTO.class)).toList();
+	 
+	}
 	
 
 }

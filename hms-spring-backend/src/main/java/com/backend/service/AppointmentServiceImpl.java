@@ -1,9 +1,12 @@
 package com.backend.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend.dtos.AddAppointmentDto;
+import com.backend.dtos.PatientByDoctorDto;
 import com.backend.entity.Appointment;
 import com.backend.entity.Doctor;
 import com.backend.entity.Patient;
@@ -41,4 +44,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return appointmentRepository.save(appointment);
     }
+
+//getpatientbydoctorid
+    
+    @Override
+    public List<PatientByDoctorDto> getPatientsByDoctorId(Long doctorId) {
+        return appointmentRepository.getPatientsByDoctorId(doctorId);
+    }
+    
 }

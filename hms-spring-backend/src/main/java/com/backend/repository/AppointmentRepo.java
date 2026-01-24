@@ -9,22 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.backend.dtos.AppointmentResponseDto;
+import com.backend.dtos.PatientByDoctorDto;
 import com.backend.entity.Appointment;
 
-public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
-
-//    @Query("""
-//        SELECT new com.backend.dtos.AppointmentResponseDto(
-//            a.id,
-//            a.dateOfAppointment,
-//            a.status,
-//            a.doctor.id,
-//            a.patient.id
-//        )
-//        FROM Appointment a
-//        WHERE a.doctor.id = :doctorId
-//    """)
-	
+public interface AppointmentRepo extends JpaRepository<Appointment, Long> {	
 	@Query("""
 		    SELECT new com.backend.dtos.AppointmentResponseDto(
 		        a.dateOfAppointment,
@@ -40,5 +28,23 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
             @Param("doctorId") Long doctorId
     );
 	
+	
+
+	// getpatientbydoctorid
+	
+	@Query("""
+	        SELECT new com.backend.dtos.PatientByDoctorDto(
+	            p.id,
+	            u.id,
+	            u.firstname,
+	            u.lastname,
+	            a.status
+	        )
+	        FROM Appointment a
+	        JOIN a.patient p
+	        JOIN p.user u
+	        WHERE a.doctor.id = :doctorId
+	    """)
+	    List<PatientByDoctorDto> getPatientsByDoctorId(@Param("doctorId") Long doctorId);
 	
 }

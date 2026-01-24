@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.dtos.AddAppointmentDto;
 import com.backend.dtos.ApiResponse;
+import com.backend.dtos.PatientByDoctorDto;
 import com.backend.entity.Appointment;
 import com.backend.service.AppointmentService;
 import com.backend.service.DoctorService;
@@ -44,6 +45,16 @@ public class DoctorController {
 	   @PostMapping("/add")
 	    public Appointment addAppointment(@RequestBody @Valid AddAppointmentDto dto) {
 	        return appointmentService.addAppointment(dto);
+	    }
+	   
+	   
+	   @GetMapping("/doctor/{doctorId}/patients")
+	    public ResponseEntity<List<PatientByDoctorDto>> getPatientsByDoctorId(
+	            @PathVariable Long doctorId) {
+
+	        return ResponseEntity.ok(
+	                appointmentService.getPatientsByDoctorId(doctorId)
+	        );
 	    }
 
 }

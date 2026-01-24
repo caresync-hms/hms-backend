@@ -15,4 +15,5 @@ public interface AppointmentService {
     List<PatientByDoctorDto> getPatientsByDoctorId(Long doctorId);
     List<AppointmentByPatientDto> getAllAppointmentsByPatientId(Long patientId);
     AppointmentBookingDto bookAppointment(AppointmentBookingRequestDto dto);
+    void softDeleteAppointment(Long appointmentId);
 }

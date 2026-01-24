@@ -34,4 +34,14 @@ public class AppointmentController {
         }
     }
     
+    @DeleteMapping("/delete/{appointmentId}")
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long appointmentId) {
+        try {
+            appointmentService.softDeleteAppointment(appointmentId);
+            return ResponseEntity.ok("Appointment cancelled successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
 }

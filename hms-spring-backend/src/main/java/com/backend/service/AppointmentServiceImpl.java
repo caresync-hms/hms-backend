@@ -102,4 +102,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         return response;
     }
     
+    //delete appoinntment
+    @Override
+    public void softDeleteAppointment(Long appointmentId) {
+
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        // ✅ Soft delete
+        appointment.setStatus(Status.INACTIVE);
+
+        appointmentRepository.save(appointment);
+    }
+    
 }

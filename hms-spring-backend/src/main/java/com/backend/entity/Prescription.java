@@ -1,5 +1,6 @@
 package com.backend.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.AttributeOverride;

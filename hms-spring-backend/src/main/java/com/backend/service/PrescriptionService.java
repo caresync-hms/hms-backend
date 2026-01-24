@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.backend.dtos.PrescriptionReqDTO;
 import com.backend.dtos.PrescriptionRespDTO;
+import com.backend.dtos.PrescriptionUpdateDTO;
 
 public interface PrescriptionService {
 PrescriptionRespDTO createPrescription(PrescriptionReqDTO dto);
@@ -16,5 +17,9 @@ PrescriptionRespDTO createPrescription(PrescriptionReqDTO dto);
 	
 	List<PrescriptionRespDTO> getPrescriptionByDoctor(Long doctorId);
 	
+	List<PrescriptionRespDTO> getPrescriptionByAppointment(Long appointmentId);
+	
 	void deletePrescription(Long id);
+	
+	PrescriptionRespDTO updatePrescription(Long id, PrescriptionUpdateDTO dto);
 }

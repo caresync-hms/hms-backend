@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 //import com.backend.dtos.AddAppointmentDto;
 import com.backend.dtos.ApiResponse;
+import com.backend.dtos.DoctorDTO;
 import com.backend.dtos.PatientByDoctorDto;
 import com.backend.entity.Appointment;
 import com.backend.service.AppointmentService;
@@ -50,6 +51,13 @@ public class DoctorController {
 	        );
 	    }
 	
+
+	   @GetMapping("/doctors/all")
+	   public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
+	       return ResponseEntity.ok(
+	               doctorService.getAllDoctors()
+	       );
+	   }
 
 
 }

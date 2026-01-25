@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.backend.dtos.PatientDTO;
 import com.backend.dtos.PatientReqDTO;
 import com.backend.dtos.PatientRespDTO;
+import com.backend.entity.Status;
 
 public interface PatientService {
 
@@ -18,4 +19,6 @@ public interface PatientService {
 	List<PatientRespDTO> getPatientsByDoctorId(Long doctorId);
 
 	List<PatientRespDTO> getAllPatients();
+
+	void updateStatus(Long id, Status status);
 }

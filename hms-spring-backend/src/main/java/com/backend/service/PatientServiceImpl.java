@@ -12,6 +12,7 @@ import com.backend.dtos.PatientDTO;
 import com.backend.dtos.PatientReqDTO;
 import com.backend.dtos.PatientRespDTO;
 import com.backend.entity.Patient;
+import com.backend.entity.Status;
 import com.backend.entity.User;
 import com.backend.repository.PatientRepository;
 import com.backend.repository.UserRepository;
@@ -94,6 +95,19 @@ public class PatientServiceImpl implements PatientService {
 	public List<PatientRespDTO> getPatientsByDoctorId(Long doctorId) {
 		return patientRepository.findPatientsByDoctorId(doctorId).stream()
 				.map(p -> modelMapper.map(p, PatientRespDTO.class)).toList();
+
+	}
+
+	@Override
+	public void updateStatus(Long patientId, Status status) {
+
+		User user = patientRepository.findUserByPatientId(patientId);
+
+		if (user.getStatus() == status) {
+			return;
+		}
+
+		user.setStatus(status);
 
 	}
 

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.dtos.ApiResponse;
 import com.backend.dtos.PatientReqDTO;
+import com.backend.dtos.StatusUpdateDTO;
 import com.backend.service.PatientService;
 
 import lombok.RequiredArgsConstructor;
@@ -68,6 +70,13 @@ public class PatientController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
 		}
 
+	}
+
+	@PatchMapping("/{id}/status")
+	public ResponseEntity<Void> updatePatientStatus(@PathVariable Long id, @RequestBody StatusUpdateDTO dto) {
+
+		patientService.updateStatus(id, dto.getStatus());
+		return ResponseEntity.noContent().build();
 	}
 
 }

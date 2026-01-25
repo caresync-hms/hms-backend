@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.custom_exceptions.ResourceNotFoundException;
 import com.backend.dtos.ApiResponse;
-import com.backend.dtos.UserResp;
+import com.backend.dtos.UserRespDTO;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
 
@@ -19,40 +19,31 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-	// depcy	
-	private final UserRepository userRepository;	
+	// depcy
+	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public List<UserResp> getAllUsers() {
+	public List<UserRespDTO> getAllUsers() {
 		// TODO Auto-generated method stub
-		return userRepository.findAll()
-				.stream()
-				.map(user -> modelMapper.map(user, UserResp.class))
-				.toList();
+		return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserRespDTO.class)).toList();
 	}
-
-	
 
 	@Override
-	public UserResp getUserDetails(Long userId) {
+	public UserRespDTO getUserDetails(Long userId) {
 		User user = userRepository.findById(userId)
-		.orElseThrow(() -> new ResourceNotFoundException("Invalid user id !!!!!!!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Invalid user id !!!!!!!"));
 
-		return modelMapper.map(user, UserResp.class);
+		return modelMapper.map(user, UserRespDTO.class);
 	}
 
-	
-	
-	
 	@Override
 	public ApiResponse encryptPassword() {
-		//get all users
-		List<User> users = userRepository.findAll();	
-		//user - persistent
-		users.forEach(user ->
-		 user.setPassword(passwordEncoder.encode(user.getPassword())));
+		// get all users
+		List<User> users = userRepository.findAll();
+		// user - persistent
+		users.forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
 		return new ApiResponse("Password encrypted", "Success");
 	}
 }

@@ -2,7 +2,6 @@ package com.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,46 +23,51 @@ import lombok.RequiredArgsConstructor;
 public class PatientController {
 	@Autowired
 	private final PatientService patientService;
-	
-	@GetMapping("/{userId}")
-	public ResponseEntity<?> getPatientDetails(@PathVariable Long userId){
+
+	@GetMapping
+	public ResponseEntity<?> getAllPatients() {
 		try {
-			return ResponseEntity.ok(patientService.getPatientDetailsByUserId(userId));
-		}catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ApiResponse(e.getMessage(),"Failed"));
+			return ResponseEntity.ok(patientService.getAllPatients());
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
 		}
 	}
-	
+
+	@GetMapping("/{userId}")
+	public ResponseEntity<?> getPatientDetails(@PathVariable Long userId) {
+		try {
+			return ResponseEntity.ok(patientService.getPatientDetailsByUserId(userId));
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
+		}
+	}
+
 	@PostMapping
 	public ResponseEntity<?> addPatient(@RequestBody PatientReqDTO dto) {
 		try {
 			return ResponseEntity.ok(patientService.addPatient(dto));
-		}catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ApiResponse(e.getMessage(),"Failed"));
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
 		}
 	}
-	
+
 	@GetMapping("doctor/{doctorId}")
-	public ResponseEntity<?> getPatientByDoctor(@PathVariable Long doctorId){
+	public ResponseEntity<?> getPatientByDoctor(@PathVariable Long doctorId) {
 		try {
 			return ResponseEntity.ok(patientService.getPatientDetailsByUserId(doctorId));
-		}catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ApiResponse(e.getMessage(),"Failed"));
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
 		}
 	}
-	
-	  @PutMapping("/{patientId}")
-	    public ResponseEntity<?> updatePatient(@PathVariable Long patientId, @RequestBody PatientReqDTO dto) {
-		  try {
-			  return ResponseEntity.ok(patientService.updatePatient(patientId, dto));
-		  }catch(RuntimeException e) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body(new ApiResponse(e.getMessage(),"Failed"));
-			}
-	        
-	    }
-	
+
+	@PutMapping("/{patientId}")
+	public ResponseEntity<?> updatePatient(@PathVariable Long patientId, @RequestBody PatientReqDTO dto) {
+		try {
+			return ResponseEntity.ok(patientService.updatePatient(patientId, dto));
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
+		}
+
+	}
+
 }

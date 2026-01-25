@@ -1,15 +1,8 @@
 package com.backend.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,43 +11,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.dtos.DoctorDTO;
 import com.backend.dtos.PatientByDoctorDto;
-import com.backend.entity.Appointment;
-import com.backend.entity.Doctor;
 import com.backend.service.AppointmentService;
 import com.backend.service.DoctorService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import jakarta.validation.Valid;
-@RestController 
+@RestController
 @RequestMapping("/doctor")
 
 public class DoctorController {
 	@Autowired
-	public DoctorService doctorService ;
-	
-	
-	
+	public DoctorService doctorService;
+
 	@Autowired
-	 private  AppointmentService appointmentService;
+	private AppointmentService appointmentService;
 
-  
-	   @GetMapping("/doctor/{doctorId}/patients")
-	    public ResponseEntity<List<PatientByDoctorDto>> getPatientsByDoctorId(
-	            @PathVariable Long doctorId) {
+	@GetMapping("/doctor/{doctorId}/patients")
+	public ResponseEntity<List<PatientByDoctorDto>> getPatientsByDoctorId(@PathVariable Long doctorId) {
 
-	        return ResponseEntity.ok(
-	                appointmentService.getPatientsByDoctorId(doctorId)
-	        );
-	    }
-	
+		return ResponseEntity.ok(appointmentService.getPatientsByDoctorId(doctorId));
+	}
 
-	   @GetMapping("/doctors/all")
-	   public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
-	       return ResponseEntity.ok(
-	               doctorService.getAllDoctors()
-	       );
-	   }
-	   
-
+	@GetMapping("/all")
+	public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
+		return ResponseEntity.ok(doctorService.getAllDoctors());
+	}
 
 }

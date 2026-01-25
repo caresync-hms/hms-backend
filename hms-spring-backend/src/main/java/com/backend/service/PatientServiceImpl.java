@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.dtos.PatientDTO;
 import com.backend.dtos.PatientReqDTO;
 import com.backend.dtos.PatientRespDTO;
-import com.backend.entity.BloodGroup;
 import com.backend.entity.Patient;
 import com.backend.entity.User;
 import com.backend.repository.PatientRepository;
@@ -22,26 +21,32 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PatientServiceImpl implements PatientService{
+public class PatientServiceImpl implements PatientService {
 	@Autowired
 	private final PatientRepository patientRepository;
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
+
+	@Override
+	public List<PatientRespDTO> getAllPatients() {
+		return patientRepository.findAll().stream().map(PatientRespDTO::new).toList();
+	}
+
 	@Override
 	public Optional<PatientDTO> getPatientDetailsByUserId(Long userId) {
-	
+
 		return patientRepository.findByUser_Id(userId).map(PatientDTO::new);
 	}
 
 	@Override
 	public PatientRespDTO addPatient(PatientReqDTO dto) {
-		
-		User user=userRepository.findById(dto.getUserId()).orElseThrow();
-		Patient patient =modelMapper.map(dto, Patient.class);
+
+		User user = userRepository.findById(dto.getUserId()).orElseThrow();
+		Patient patient = modelMapper.map(dto, Patient.class);
 		patient.setUser(user);
-		
-		Patient savedPatient=patientRepository.save(patient);
-		PatientRespDTO resp=modelMapper.map(savedPatient, PatientRespDTO.class);
+
+		Patient savedPatient = patientRepository.save(patient);
+		PatientRespDTO resp = modelMapper.map(savedPatient, PatientRespDTO.class);
 		resp.setPatientId(savedPatient.getId());
 		resp.setUserId(user.getId());
 		resp.setFirstname(user.getFirstname());
@@ -60,36 +65,36 @@ public class PatientServiceImpl implements PatientService{
 
 	@Override
 	public PatientRespDTO updatePatient(Long patientId, PatientReqDTO dto) {
-		Patient patient=patientRepository.findById(patientId).orElseThrow();
+		Patient patient = patientRepository.findById(patientId).orElseThrow();
 		patient.setBloodGroup(dto.getBloodGroup());
 		patient.setMedicalHistory(dto.getMedicalHistory());
-        patient.setAdmitDate(dto.getAdmitDate());
-        patient.setDischargeDate(dto.getDischargeDate());
-        Patient updated = patientRepository.save(patient);
-        PatientRespDTO resp = new PatientRespDTO();
-        resp.setPatientId(updated.getId());
-        resp.setUserId(updated.getUser().getId());
+		patient.setAdmitDate(dto.getAdmitDate());
+		patient.setDischargeDate(dto.getDischargeDate());
+		Patient updated = patientRepository.save(patient);
+		PatientRespDTO resp = new PatientRespDTO();
+		resp.setPatientId(updated.getId());
+		resp.setUserId(updated.getUser().getId());
 
-        resp.setFirstname(updated.getUser().getFirstname());
-        resp.setLastname(updated.getUser().getLastname());
-        resp.setEmail(updated.getUser().getEmail());
-        resp.setPhone(updated.getUser().getPhone());
-        resp.setGender(updated.getUser().getGender());
-        resp.setDob(updated.getUser().getDob());
-        resp.setStatus(updated.getUser().getStatus());
+		resp.setFirstname(updated.getUser().getFirstname());
+		resp.setLastname(updated.getUser().getLastname());
+		resp.setEmail(updated.getUser().getEmail());
+		resp.setPhone(updated.getUser().getPhone());
+		resp.setGender(updated.getUser().getGender());
+		resp.setDob(updated.getUser().getDob());
+		resp.setStatus(updated.getUser().getStatus());
 
-        resp.setBloodGroup(updated.getBloodGroup());
-        resp.setMedicalHistory(updated.getMedicalHistory());
-        resp.setAdmitDate(updated.getAdmitDate());
-        resp.setDischargeDate(updated.getDischargeDate());
+		resp.setBloodGroup(updated.getBloodGroup());
+		resp.setMedicalHistory(updated.getMedicalHistory());
+		resp.setAdmitDate(updated.getAdmitDate());
+		resp.setDischargeDate(updated.getDischargeDate());
 		return resp;
 	}
 
 	@Override
 	public List<PatientRespDTO> getPatientsByDoctorId(Long doctorId) {
-		return patientRepository.findPatientsByDoctorId(doctorId).stream().map(p->modelMapper.map(p,PatientRespDTO.class)).toList();
-	 
+		return patientRepository.findPatientsByDoctorId(doctorId).stream()
+				.map(p -> modelMapper.map(p, PatientRespDTO.class)).toList();
+
 	}
-	
 
 }

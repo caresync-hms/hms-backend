@@ -3,6 +3,7 @@ package com.backend.controller;
 import com.backend.dtos.AppointmentBookingDto;
 import com.backend.dtos.AppointmentBookingRequestDto;
 import com.backend.dtos.AppointmentByPatientDto;
+import com.backend.dtos.AppointmentResponseDto;
 import com.backend.dtos.AppointmentUpdateRequestDto;
 import com.backend.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,15 @@ public class AppointmentController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+    
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<List<AppointmentResponseDto>> getAppointmentsByDoctorId(
+            @PathVariable Long doctorId) {
+
+        return ResponseEntity.ok(
+                appointmentService.getAppointmentsByDoctorId(doctorId)
+        );
     }
     
 }

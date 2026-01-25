@@ -1,8 +1,3 @@
-//package com.backend.controller;
-//
-//public class AdminController {
-//
-//}
 
 package com.backend.controller;
 

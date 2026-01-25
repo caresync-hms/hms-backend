@@ -1,7 +1,6 @@
 package com.backend.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class User extends Base implements UserDetails {
 	private Gender gender;
 
 	@Column(name = "dob", nullable = false)
-	private LocalDateTime dob;
+	private LocalDate dob;
 
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;

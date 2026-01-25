@@ -1,11 +1,5 @@
 package com.backend.entity;
 
 public enum Role {
-    ADMIN,
-    DOCTOR,
-    PATIENT,
-    RECEPTIONIST
+	ROLE_ADMIN, ROLE_PATIENT, ROLE_DOCTOR
 }
-
-
-

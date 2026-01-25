@@ -2,69 +2,83 @@ package com.backend.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
-@Table(name="user")
+@Table(name = "user")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@AttributeOverride(name="id", column = @Column(name="user_id"))
-public class User extends Base {
+@AttributeOverride(name = "id", column = @Column(name = "user_id"))
+public class User extends Base implements UserDetails {
 
-    @Column(nullable = false, length = 100)
-    private String username;
+	@Column(nullable = false, length = 100)
+	private String username;
 
-    @Column(nullable = false, length = 100)
-    private String password;
-    
-    @Column(nullable=false,length=100)
-    private String firstname;
-    
-    @Column(nullable=false, length=100)
-    private String lastname;
+	@Column(nullable = false, length = 100)
+	private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable=false)
-    private Gender gender;
-    
-    @Column(name="dob",nullable=false)
-    private LocalDate dob;
+	@Column(nullable = false, length = 100)
+	private String firstname;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
+	@Column(nullable = false, length = 100)
+	private String lastname;
 
-    @Column(length = 15)
-    private String phone;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Role role;
 
-    @Column(length = 255)
-    private String address;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Gender gender;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
-    
-    @PrePersist
-    protected void setDefaults() {
-        if (this.role == null) {
-            this.role = Role.PATIENT;
-        }
-        if (this.status == null) {
-            this.status = Status.ACTIVE;
-        }
-    }
+	@Column(name = "dob", nullable = false)
+	private LocalDateTime dob;
+
+	@Column(nullable = false, unique = true, length = 100)
+	private String email;
+
+	@Column(length = 15)
+	private String phone;
+
+	@Column(length = 255)
+	private String address;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Status status;
+
+	/*
+	 * @PrePersist protected void setDefaults() { if (this.role == null) { this.role
+	 * = Role.PATIENT; } if (this.status == null) { this.status = Status.ACTIVE; } }
+	 */
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+
+		return List.of(new SimpleGrantedAuthority(this.role.name()));
+	}
+
+	@Override
+	public String getUsername() {
+
+		return this.email;
+	}
 }
-
-

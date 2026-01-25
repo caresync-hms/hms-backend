@@ -2,80 +2,93 @@ package com.backend.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.dtos.ApiResponse;
-import com.backend.dtos.UserReqDTO;
-import com.backend.dtos.UserRespDTO;
+import com.backend.custom_exceptions.InvalidInputException;
+import com.backend.dtos.AuthRequest;
+import com.backend.dtos.AuthResp;
+import com.backend.dtos.UserResp;
+import com.backend.entity.User;
+import com.backend.security.JWTUtils;
 import com.backend.service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/users")
+@Validated
+@Slf4j
+@RequiredArgsConstructor
 public class UserController {
-	@Autowired
-	private UserService userService;
-	
+
+	private final UserService userService;
+	private final AuthenticationManager authenticationManager;
+	private final JWTUtils jwtUtils;
+
 	@GetMapping
-	public ResponseEntity<?> getAllUsers(){
-		try {
-			 return ResponseEntity.ok(userService.getAllUsers());
-		}catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ApiResponse(e.getMessage(),"Failed"));
+	public ResponseEntity<?> getAllUsers() {
+		System.out.println("in get all users");
+		List<UserResp> users = userService.getAllUsers();
+		if (users.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT) // SC 204
+					.build();
 		}
+		return ResponseEntity.ok(users);
 	}
-	
-	@PostMapping
-	public ResponseEntity<?> addUser(@RequestBody UserReqDTO dto){
-		try {
-			 return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(dto));
-		}catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ApiResponse(e.getMessage(),"Failed"));
-		}
+
+	@GetMapping("/{userId}")
+
+	@Operation(description = "Get user details by id ")
+	public ResponseEntity<?> getUserDetailsById(@PathVariable @Min(1) @Max(100) Long userId) {
+		System.out.println("in get user dtls " + userId);
+
+		return ResponseEntity.ok(userService.getUserDetails(userId));
+
 	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getUser(@PathVariable Long id){
-		try {
-			 return ResponseEntity.ok(userService.getUserDetails(id));
-		}catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ApiResponse(e.getMessage(),"Failed"));
+
+	@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUser(@RequestBody @Valid AuthRequest dto) {
+
+		Authentication fullyAuthenticated = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
+
+		User userEntity = (User) fullyAuthenticated.getPrincipal();
+
+		// normalize roles for comparison
+		String requestedRole = dto.getUserRole().toUpperCase();
+		String actualRole = userEntity.getRole().name();
+
+		if (!requestedRole.equals(actualRole)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new InvalidInputException("Role mismatch"));
 		}
+
+		return ResponseEntity.ok(
+				new AuthResp("Login Successful", jwtUtils.generateToken(userEntity), actualRole, userEntity.getId()));
 	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateUser(  @PathVariable Long id,@RequestBody UserReqDTO dto){
-		try {
-			 return ResponseEntity.ok(userService.updateUserDetails(id, dto));
-		}catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ApiResponse(e.getMessage(),"Failed"));
-		}
+
+	@PatchMapping("/pwd-encryption")
+	@Operation(description = "Encrypt Password of all users")
+	public ResponseEntity<?> encryptUserPassword() {
+		log.info("encrypting users password ");
+		return ResponseEntity.ok(userService.encryptPassword());
+
 	}
-	
-	 @DeleteMapping("/{id}")
-	    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-		try {
-			userService.deleteUserDetailsSoft(id);
-			return ResponseEntity.ok(
-	                new ApiResponse("User deleted successfully", "SUCCESS"));
-		}catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ApiResponse(e.getMessage(),"Failed"));
-		}
-		
-	 }
-	
+
 }

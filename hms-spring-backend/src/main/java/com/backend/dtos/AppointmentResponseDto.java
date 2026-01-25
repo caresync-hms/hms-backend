@@ -1,24 +1,4 @@
 
-
-
-//package com.backend.dtos;
-//
-//import java.time.LocalDateTime;
-//import com.backend.entity.AppointmentStatus;
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.Setter;
-//
-//@Getter
-//@Setter
-//@AllArgsConstructor
-//public class AppointmentResponseDto {
-//
-//    private LocalDateTime dateOfAppointment;
-//    private AppointmentStatus appointmentStatus;
-//    private String patientName;
-//}
-
 package com.backend.dtos;
 
 import java.time.LocalDateTime;

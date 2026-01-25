@@ -1,27 +1,37 @@
+
 package com.backend.dtos;
 
 import java.time.LocalDateTime;
 
-import com.backend.entity.Status;
+import com.backend.entity.AppointmentStatus;
+import com.backend.entity.Gender;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class AppointmentResponseDto {
 
-//    private Long appointmentId;
-//    private LocalDateTime dateOfAppointment;
-//    private Status status;
-//
-//    private Long doctorId;
-//    private Long patientId;
-	
-	private LocalDateTime dateOfAppointment;
-    private Status appointmentStatus;
+    private LocalDateTime dateOfAppointment;
+    private AppointmentStatus appointmentStatus;
     private String patientName;
+    private String phoneNo;
+    private Gender gender;
+
+    // 🔴 REQUIRED for JPQL constructor expression
+    public AppointmentResponseDto(
+            LocalDateTime dateOfAppointment,
+            AppointmentStatus appointmentStatus,
+            String patientName,
+            String phoneNo,
+            Gender gender
+    ) {
+        this.dateOfAppointment = dateOfAppointment;
+        this.appointmentStatus = appointmentStatus;
+        this.patientName = patientName;
+        this.phoneNo = phoneNo;
+        this.gender = gender;
+    }
 }
 

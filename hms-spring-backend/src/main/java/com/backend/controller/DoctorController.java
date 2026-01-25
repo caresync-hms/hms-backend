@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.dtos.AddAppointmentDto;
-import com.backend.dtos.ApiResponse;
+import com.backend.dtos.DoctorDTO;
+import com.backend.dtos.PatientByDoctorDto;
 import com.backend.entity.Appointment;
+import com.backend.entity.Doctor;
 import com.backend.service.AppointmentService;
 import com.backend.service.DoctorService;
 
@@ -31,19 +32,29 @@ public class DoctorController {
 	@Autowired
 	public DoctorService doctorService ;
 	
+	
+	
 	@Autowired
 	 private  AppointmentService appointmentService;
-	@GetMapping("/{doctorId}/appointments")
-	public ResponseEntity<?> getAppointments(@PathVariable Long doctorId) {
-	    return ResponseEntity.ok(
-	        doctorService.getAppointmentsByDoctorId(doctorId)
-	    );
-	}
-	
-	
-	   @PostMapping("/add")
-	    public Appointment addAppointment(@RequestBody @Valid AddAppointmentDto dto) {
-	        return appointmentService.addAppointment(dto);
+
+  
+	   @GetMapping("/doctor/{doctorId}/patients")
+	    public ResponseEntity<List<PatientByDoctorDto>> getPatientsByDoctorId(
+	            @PathVariable Long doctorId) {
+
+	        return ResponseEntity.ok(
+	                appointmentService.getPatientsByDoctorId(doctorId)
+	        );
 	    }
+	
+
+	   @GetMapping("/doctors/all")
+	   public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
+	       return ResponseEntity.ok(
+	               doctorService.getAllDoctors()
+	       );
+	   }
+	   
+
 
 }

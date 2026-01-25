@@ -1,0 +1,24 @@
+[33md832f41[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #6 from caresync-hms/feat/Patient
+[33m8bfb2bc[m[33m ([m[1;31morigin/feat/Patient[m[33m)[m Added complete Functionality of prescription
+[33md360fe3[m Added functionlity of fetching all prescription by patientid
+[33m09f4506[m Added functionlity of fetching all prescription
+[33mc0b8fb5[m Added Prescription services
+[33m8674e06[m Added PatientDTO and Functionality of Patient
+[33m63ba277[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m Merge pull request #5 from caresync-hms/Newhope
+[33m0b868fd[m[33m ([m[1;31morigin/Newhope[m[33m, [m[1;32mNewhope[m[33m)[m 'Api for the appointment getall and add the appointment
+[33mbec840e[m getallappointmentbydoctorid api done
+[33meb8842c[m creating api for doctor
+[33m8625a39[m Entity table created
+[33m598c988[m making entity tables
+[33mba0de36[m Merge pull request #4 from caresync-hms/Patient/Controller
+[33m6487a98[m[33m ([m[1;31morigin/Patient/Controller[m[33m)[m Changes in Patient Module
+[33m1418b29[m[33m ([m[1;32mtemp[m[33m)[m Merge pull request #3 from caresync-hms/Patient/Controller
+[33mb50a67c[m Changes in Entity
+[33m7a9725c[m createdfeat(patient): add patient module with entity, service, repository and controller
+[33m141a68b[m Merge pull request #2 from caresync-hms/Patient/Entity
+[33maffc285[m Changes Done
+[33md96f299[m Added fields in BaseUser and Creted Patient Entity
+[33m7ef4679[m Merge pull request #1 from caresync-hms/temp
+[33m5e57079[m[33m ([m[1;31morigin/temp[m[33m)[m User Entity Created
+[33m8c26ff9[m folder structure created
+[33m88655aa[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Add initial README for hms-backend project

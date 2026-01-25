@@ -17,17 +17,14 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@AttributeOverride(
-	    name = "id",
-	    column = @Column(name = "doctor_id")
-	)
-public class Doctor extends Base  {
+@AttributeOverride(name = "id", column = @Column(name = "doctor_id"))
+public class Doctor extends Base {
 	@OneToOne
-	@JoinColumn(name="user_id")
-	private User user ;
-	@Column(name="specialization")
-	private String specilization ;
+	@JoinColumn(name = "user_id")
+	private User user;
+	@Column(name = "specialization")
+	private String specialization;
 	@ManyToOne
-	@JoinColumn(name="dept_id")
-	private Department dept ;
+	@JoinColumn(name = "dept_id")
+	private Department dept;
 }

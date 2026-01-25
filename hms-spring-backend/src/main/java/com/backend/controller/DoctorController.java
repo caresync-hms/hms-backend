@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.dtos.AddAppointmentDto;
+//import com.backend.dtos.AddAppointmentDto;
 import com.backend.dtos.ApiResponse;
 import com.backend.dtos.PatientByDoctorDto;
 import com.backend.entity.Appointment;
@@ -40,11 +40,7 @@ public class DoctorController {
 	        doctorService.getAppointmentsByDoctorId(doctorId)
 	    );
 	}
-	
-	
-	
-	   
-	   
+  
 	   @GetMapping("/doctor/{doctorId}/patients")
 	    public ResponseEntity<List<PatientByDoctorDto>> getPatientsByDoctorId(
 	            @PathVariable Long doctorId) {
@@ -53,5 +49,7 @@ public class DoctorController {
 	                appointmentService.getPatientsByDoctorId(doctorId)
 	        );
 	    }
+	
+
 
 }

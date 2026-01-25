@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.backend.dtos.AdminAppointmentDTO;
 import com.backend.dtos.AppointmentByPatientDto;
 import com.backend.dtos.AppointmentResponseDto;
 import com.backend.dtos.PatientByDoctorDto;
@@ -47,7 +48,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 	        JOIN p.user u
 	        WHERE a.doctor.id = :doctorId
 	    """)
-	    List<PatientByDoctorDto> getPatientsByDoctorId(@Param("doctorId") Long doctorId);
+	    List<PatientByDoctorDto>getPatientsByDoctorId (@Param("doctorId") Long doctorId);
 	
 	
 	  @Query("""
@@ -73,5 +74,21 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 		        LocalDateTime dateOfAppointment,
 		        Long id
 		);
+	  
+	  @Query("""
+		        SELECT new com.backend.dtos.AdminAppointmentDTO(
+		            CONCAT(d.user.firstname, ' ', d.user.lastname),
+		            CONCAT(p.user.firstname, ' ', p.user.lastname),
+		            a.dateOfAppointment,
+		            a.status,
+		            d.dept.departmentName
+		        )
+		        FROM Appointment a
+		        JOIN a.doctor d
+		        JOIN a.patient p
+		    """)
+		    List<AdminAppointmentDTO> findAllAdminAppointments();
+	 
+	  
 	
 }

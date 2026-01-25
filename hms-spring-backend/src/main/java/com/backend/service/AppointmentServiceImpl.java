@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.backend.dtos.AddAppointmentDto;
+import com.backend.dtos.AdminAppointmentDTO;
+//import com.backend.dtos.AddAppointmentDto;
 import com.backend.dtos.AppointmentBookingDto;
 import com.backend.dtos.AppointmentBookingRequestDto;
 import com.backend.dtos.AppointmentByPatientDto;
@@ -33,23 +34,23 @@ public class AppointmentServiceImpl implements AppointmentService {
 		@Autowired
     private  PatientRepository patientRepository;
 
-    @Override
-    public Appointment addAppointment(AddAppointmentDto dto) {
-
-        Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
-
-        Patient patient = patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new RuntimeException("Patient not found"));
-
-        Appointment appointment = new Appointment();
-        appointment.setDoctor(doctor);
-        appointment.setPatient(patient);
-        appointment.setDateOfAppointment(dto.getDateOfAppointment());
-        appointment.setStatus(dto.getStatus());
-
-        return appointmentRepository.save(appointment);
-    }
+//    @Override
+//    public Appointment addAppointment(AddAppointmentDto dto) {
+//
+//        Doctor doctor = doctorRepository.findById(dto.getDoctorId())
+//                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+//
+//        Patient patient = patientRepository.findById(dto.getPatientId())
+//                .orElseThrow(() -> new RuntimeException("Patient not found"));
+//
+//        Appointment appointment = new Appointment();
+//        appointment.setDoctor(doctor);
+//        appointment.setPatient(patient);
+//        appointment.setDateOfAppointment(dto.getDateOfAppointment());
+//        appointment.setStatus(dto.getStatus());
+//
+//        return appointmentRepository.save(appointment);
+//    }
 
 //getpatientbydoctorid
     
@@ -57,6 +58,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<PatientByDoctorDto> getPatientsByDoctorId(Long doctorId) {
         return appointmentRepository.getPatientsByDoctorId(doctorId);
     }
+		
+
     
    //getallappointmentbypatient
     @Override
@@ -124,7 +127,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	    Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
 	            .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-	    // 2️⃣ Update ONLY date (as per requirement)
+	    // 2️⃣ Update date 
 	    appointment.setDateOfAppointment(dto.getDateOfAppointment());
 
 	    // 3️⃣ Save
@@ -149,5 +152,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
     
     
+	  @Override
+	    public List<AdminAppointmentDTO> getAllAdminAppointments() {
+	        return appointmentRepository.findAllAdminAppointments();
+	    }
+	
     
 }

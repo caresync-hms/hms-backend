@@ -32,3 +32,5 @@ public class PatientByDoctorDto {
     public String getLastname() { return lastname; }
     public Status getAppointmentStatus() { return appointmentStatus; }
 }
+
+

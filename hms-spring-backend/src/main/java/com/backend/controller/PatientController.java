@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +44,26 @@ public class PatientController {
 					.body(new ApiResponse(e.getMessage(),"Failed"));
 		}
 	}
+	
+	@GetMapping("doctor/{doctorId}")
+	public ResponseEntity<?> getPatientByDoctor(@PathVariable Long doctorId){
+		try {
+			return ResponseEntity.ok(patientService.getPatientDetailsByUserId(doctorId));
+		}catch(RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ApiResponse(e.getMessage(),"Failed"));
+		}
+	}
+	
+	  @PutMapping("/{patientId}")
+	    public ResponseEntity<?> updatePatient(@PathVariable Long patientId, @RequestBody PatientReqDTO dto) {
+		  try {
+			  return ResponseEntity.ok(patientService.updatePatient(patientId, dto));
+		  }catch(RuntimeException e) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new ApiResponse(e.getMessage(),"Failed"));
+			}
+	        
+	    }
 	
 }

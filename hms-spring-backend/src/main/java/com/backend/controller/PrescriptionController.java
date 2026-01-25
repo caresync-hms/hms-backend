@@ -24,7 +24,7 @@ import com.backend.service.PrescriptionService;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/prescription")
+@RequestMapping("/prescriptions")
 @AllArgsConstructor
 public class PrescriptionController {
 	@Autowired

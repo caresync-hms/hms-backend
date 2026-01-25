@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 //import com.backend.dtos.AddDoctorDto;
 import com.backend.dtos.AppointmentResponseDto;
 import com.backend.dtos.DoctorDTO;
+import com.backend.dtos.DoctorReqDTO;
+import com.backend.dtos.DoctorRespDTO;
 import com.backend.entity.Department;
 import com.backend.entity.Doctor;
 import com.backend.entity.Role;
@@ -40,6 +42,24 @@ public class DoctorServiceImpl implements DoctorService {
     public List<DoctorDTO> getAllDoctors() {
         return doctorRepo.findAllDoctors();
     }
+
+	@Override
+	public DoctorRespDTO addDoctor(DoctorReqDTO dto) {
+		User user=userRepository.findById(dto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+		Department department=departmentRepository.findById(dto.getDepartmentId()).orElseThrow(() -> new RuntimeException("Department not found"));
+		Doctor doctor=new Doctor();
+		doctor.setUser(user);
+		doctor.setDept(department);
+		doctor.setSpecilization(dto.getSpecialization());
+		 Doctor saved=doctorRepo.save(doctor);
+		DoctorRespDTO resp=new DoctorRespDTO();
+		resp.setDoctorId(saved.getId());
+		resp.setSpecialization(saved.getSpecilization());
+		resp.setDepartmentName(saved.getDept().getDepartmentName());
+		resp.setUserId(saved.getUser().getId());
+		resp.setUsername(saved.getUser().getUsername());
+		return resp;
+	}
     
     
 }

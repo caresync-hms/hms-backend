@@ -1,5 +1,6 @@
 package com.backend.dtos;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.backend.entity.Prescription;
@@ -13,9 +14,15 @@ import lombok.NoArgsConstructor;
 public class PrescriptionRespDTO {
 
 	private Long prescriptionId;
-    private Long appointmentId;
-    private Long doctorId;
+
     private Long patientId;
+    private String patientName;
+
+    private Long doctorId;
+    private String doctorName;
+
+    private Long appointmentId;
+
     private LocalDateTime dateIssued;
     private String notes;
     

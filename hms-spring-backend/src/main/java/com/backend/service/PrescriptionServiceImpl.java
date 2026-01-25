@@ -47,81 +47,31 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 		prescription.setIssueDate(dto.getDateIssued());
 		prescription.setAdvice(dto.getNotes());
 		
-		Prescription persist =prescriptionRepository.save(prescription);
-		PrescriptionRespDTO resp= modelMapper.map(persist, PrescriptionRespDTO.class);
+		Prescription saved =prescriptionRepository.save(prescription);
 		
-		resp.setPatientId(patient.getId());
-		resp.setPrescriptionId(persist.getId());
-		resp.setPatientId(patient.getId());
-		resp.setDoctorId(doctor.getId());
-		resp.setAppointmentId(appointment.getId());
-		resp.setNotes(persist.getAdvice());
-		resp.setDateIssued(persist.getIssueDate());
-		
-		return resp;
+		return mapToRespDTO(saved);
 	}
 
 	@Override
 	public PrescriptionRespDTO getPrescriptionById(Long id) {
-		Prescription prescription=prescriptionRepository.findById(id).orElseThrow();
-		PrescriptionRespDTO resp=modelMapper.map(prescription,PrescriptionRespDTO.class);
-		resp.setPatientId(prescription.getPatient().getId());
-		resp.setDoctorId(prescription.getDoctor().getId());
-		resp.setPrescriptionId(id);
-		resp.setAppointmentId(prescription.getAppointment().getId());
-		resp.setDateIssued(prescription.getIssueDate());
-		resp.setNotes(prescription.getAdvice());
-		return resp;
+		Prescription prescription=prescriptionRepository.findById(id).orElseThrow(() ->
+        new RuntimeException("Prescription NOT found with id = " + id));
+		return mapToRespDTO(prescription);
 	}
 
 	@Override
 	public List<PrescriptionRespDTO> getAllPrescriptions() {
-		List<Prescription> prescriptions=prescriptionRepository.findAll();
-		 return prescriptions.stream()
-		            .map(p ->{
-		            	 PrescriptionRespDTO dto = new PrescriptionRespDTO();
-		                 dto.setPrescriptionId(p.getId());
-		                 dto.setAppointmentId(p.getAppointment().getId());
-		                 dto.setDoctorId(p.getDoctor().getId());
-		                 dto.setPatientId(p.getPatient().getId());
-		                 dto.setDateIssued(p.getIssueDate());
-		                 dto.setNotes(p.getAdvice());
-		                 return dto;
-		            } ).toList();
+		 return prescriptionRepository.findAll().stream().map(this::mapToRespDTO).toList();
 	}
 
 	@Override
 	public List<PrescriptionRespDTO> getPrescriptionByPatient(Long patientId) {
-		List<Prescription> prescriptions=prescriptionRepository.findByPatientId(patientId);
-		return prescriptions.stream()
-	            .map(p -> {
-	                PrescriptionRespDTO dto = new PrescriptionRespDTO();
-	                dto.setPrescriptionId(p.getId());
-	                dto.setPatientId(p.getPatient().getId());
-	                dto.setDoctorId(p.getDoctor().getId());
-	                dto.setAppointmentId(p.getAppointment().getId());
-	                dto.setDateIssued(p.getIssueDate());
-	                dto.setNotes(p.getAdvice());
-	                return dto;
-	            })
-	            .toList();
+		return prescriptionRepository.findByPatientId(patientId).stream().map(this::mapToRespDTO).toList();
 	}
 
 	@Override
 	public List<PrescriptionRespDTO> getPrescriptionByDoctor(Long doctorId) {
-		List<Prescription> prescriptions=prescriptionRepository.findByDoctorId(doctorId);
-		return prescriptions.stream()
-	            .map(p -> {
-	                PrescriptionRespDTO dto = new PrescriptionRespDTO();
-	                dto.setPrescriptionId(p.getId());
-	                dto.setPatientId(p.getPatient().getId());
-	                dto.setDoctorId(p.getDoctor().getId());
-	                dto.setAppointmentId(p.getAppointment().getId());
-	                dto.setDateIssued(p.getIssueDate());
-	                dto.setNotes(p.getAdvice());
-	                return dto;
-	            })
-	            .toList();
+		return prescriptionRepository.findByDoctorId(doctorId).stream().map(this::mapToRespDTO).toList();
 	}
 
 	@Override
@@ -134,18 +84,8 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 
 	@Override
 	public List<PrescriptionRespDTO> getPrescriptionByAppointment(Long appointmentId) {
-		List<Prescription> prescriptions=prescriptionRepository.findByAppointmentId(appointmentId);
-		return prescriptions.stream()
-	            .map(p -> {
-	                PrescriptionRespDTO dto = new PrescriptionRespDTO();
-	                dto.setPrescriptionId(p.getId());
-	                dto.setPatientId(p.getPatient().getId());
-	                dto.setDoctorId(p.getDoctor().getId());
-	                dto.setAppointmentId(p.getAppointment().getId());
-	                dto.setDateIssued(p.getIssueDate());
-	                dto.setNotes(p.getAdvice());
-	                return dto;
-	            })
+		return prescriptionRepository.findByAppointmentId(appointmentId).stream()
+	            .map(this::mapToRespDTO)
 	            .toList();
 	}
 
@@ -158,6 +98,28 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 		Prescription updated =prescriptionRepository.save(prescription);
 		
 		return new PrescriptionRespDTO(updated);
+	}
+	
+	private PrescriptionRespDTO mapToRespDTO(Prescription p) {
+	    PrescriptionRespDTO dto = new PrescriptionRespDTO();
+
+	    dto.setPrescriptionId(p.getId());
+
+	    dto.setPatientId(p.getPatient().getId());
+	    dto.setPatientName(
+	        p.getPatient().getUser().getFirstname() + " " + p.getPatient().getUser().getLastname()
+	    );
+
+	    dto.setDoctorId(p.getDoctor().getId());
+	    dto.setDoctorName(
+	        p.getDoctor().getUser().getFirstname()+ " " + p.getDoctor().getUser().getLastname()
+	    );
+
+	    dto.setAppointmentId(p.getAppointment().getId());
+	    dto.setDateIssued(p.getIssueDate());
+	    dto.setNotes(p.getAdvice());
+
+	    return dto;
 	}
 
 }

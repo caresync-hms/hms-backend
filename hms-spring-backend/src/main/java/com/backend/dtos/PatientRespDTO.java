@@ -18,39 +18,37 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PatientRespDTO {
 	private Long patientId;
-    private Long userId;
+	private Long userId;
 
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String phone;
-    private Gender gender;
-    private LocalDate dob;
-    private Status status;
+	private String firstname;
+	private String lastname;
+	private String email;
+	private String phone;
+	private Gender gender;
+	private LocalDate dob;
+	private Status status;
 
-    private BloodGroup bloodGroup;
-    private String medicalHistory;
-    private LocalDateTime admitDate;
-    private LocalDateTime dischargeDate;
-    
-    public PatientRespDTO(Patient patient) {
-        this.patientId = patient.getId();
+	private BloodGroup bloodGroup;
+	private String medicalHistory;
+	private LocalDateTime admitDate;
+	private LocalDateTime dischargeDate;
 
-        User user = patient.getUser();
-        this.userId = user.getId();
-        this.firstname = user.getFirstname();
-        this.lastname = user.getLastname();
-        this.email = user.getEmail();
-        this.phone = user.getPhone();
-        this.gender = user.getGender();
-        this.dob = user.getDob();
-        this.status = user.getStatus();
+	public PatientRespDTO(Patient patient) {
+		this.patientId = patient.getId();
 
-        this.bloodGroup = patient.getBloodGroup();
-        this.medicalHistory = patient.getMedicalHistory();
-        this.admitDate = patient.getAdmitDate();
-        this.dischargeDate = patient.getDischargeDate();
-    }
+		User user = patient.getUser();
+		this.userId = user.getId();
+		this.firstname = user.getFirstname();
+		this.lastname = user.getLastname();
+		this.email = user.getEmail();
+		this.phone = user.getPhone();
+		this.gender = user.getGender();
+		this.dob = user.getDob();
+		this.status = user.getStatus();
 
-	
+		this.bloodGroup = patient.getBloodGroup();
+		this.medicalHistory = patient.getMedicalHistory();
+		this.admitDate = patient.getAdmitDate();
+		this.dischargeDate = patient.getDischargeDate();
+	}
 }

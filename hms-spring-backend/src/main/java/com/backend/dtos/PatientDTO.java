@@ -28,7 +28,7 @@ public class PatientDTO {
     private String email;
     private String phone;
     private Gender gender;
-    private LocalDate dob;
+    private LocalDateTime dob;
     private Status status;
 
     private BloodGroup bloodGroup;

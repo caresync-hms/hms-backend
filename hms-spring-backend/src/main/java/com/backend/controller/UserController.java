@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.custom_exceptions.InvalidInputException;
 import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResp;
-import com.backend.dtos.UserResp;
+import com.backend.dtos.UserRespDTO;
 import com.backend.entity.User;
 import com.backend.security.JWTUtils;
 import com.backend.service.UserService;
@@ -45,7 +45,7 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<?> getAllUsers() {
 		System.out.println("in get all users");
-		List<UserResp> users = userService.getAllUsers();
+		List<UserRespDTO> users = userService.getAllUsers();
 		if (users.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT) // SC 204
 					.build();

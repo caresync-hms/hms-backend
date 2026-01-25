@@ -29,9 +29,6 @@ import lombok.Setter;
 public class User extends Base implements UserDetails {
 
 	@Column(nullable = false, length = 100)
-	private String username;
-
-	@Column(nullable = false, length = 100)
 	private String password;
 
 	@Column(nullable = false, length = 100)

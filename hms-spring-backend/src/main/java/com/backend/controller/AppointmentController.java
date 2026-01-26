@@ -23,7 +23,7 @@ import com.backend.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/appointments")
+@RequestMapping("/appointments")
 @RequiredArgsConstructor
 public class AppointmentController {
 

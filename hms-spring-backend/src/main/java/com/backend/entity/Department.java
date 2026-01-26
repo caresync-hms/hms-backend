@@ -11,7 +11,8 @@ import lombok.Setter;
 @Setter
 @AttributeOverride(name = "id", column = @Column(name = "deptId"))
 public class Department extends Base {
-	@Column(name = "dept_name")
+
+	@Column(name = "dept_name", nullable = false, unique = true)
 	private String departmentName;
 
 	@Column(length = 100)

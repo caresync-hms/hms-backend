@@ -7,13 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.dtos.AddDoctorDTO;
 import com.backend.dtos.DoctorDTO;
 import com.backend.dtos.PatientByDoctorDto;
 import com.backend.dtos.StatusUpdateDTO;
+import com.backend.dtos.UpdateDoctorDTO;
 import com.backend.service.AppointmentService;
 import com.backend.service.DoctorService;
 
@@ -41,6 +45,16 @@ public class DoctorController {
 	@GetMapping("/all")
 	public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
 		return ResponseEntity.ok(doctorService.getAllDoctors());
+	}
+
+	@PostMapping
+	public ResponseEntity<DoctorDTO> addDoctor(@RequestBody AddDoctorDTO dto) {
+		return ResponseEntity.ok(doctorService.addDoctor(dto));
+	}
+
+	@PutMapping("/{doctorId}")
+	public ResponseEntity<DoctorDTO> updateDoctor(@PathVariable Long doctorId, @RequestBody UpdateDoctorDTO dto) {
+		return ResponseEntity.ok(doctorService.updateDoctor(doctorId, dto));
 	}
 
 	@PatchMapping("/{id}/status")

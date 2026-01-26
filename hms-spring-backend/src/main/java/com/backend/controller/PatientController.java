@@ -46,7 +46,7 @@ public class PatientController {
 		}
 	}
 
-	@PostMapping
+	@PostMapping({ "", "/register" })
 	public ResponseEntity<PatientDTO> addPatient(@RequestBody CreatePatientDTO dto) {
 		return ResponseEntity.ok(patientService.addPatient(dto));
 	}

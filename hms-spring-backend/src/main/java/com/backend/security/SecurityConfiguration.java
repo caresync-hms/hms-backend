@@ -31,10 +31,10 @@ public class SecurityConfiguration {
 
 		http.csrf(csrf -> csrf.disable());
 
-		http.cors(cors -> cors.configurationSource(null));
+		http.cors(cors -> cors.configurationSource(corsConfigurationSource));
 		http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.authorizeHttpRequests(request -> request
-				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users/signin", "/patients/signup", "/doctors",
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users/signin", "/patient/register", "/doctors",
 						"/users/pwd-encryption")
 				.permitAll().requestMatchers(HttpMethod.OPTIONS).permitAll()
 				.requestMatchers(HttpMethod.POST, "/appointments/book").hasRole("PATIENT")

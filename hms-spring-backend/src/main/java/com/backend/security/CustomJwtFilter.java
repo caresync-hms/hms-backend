@@ -30,7 +30,7 @@ public class CustomJwtFilter extends OncePerRequestFilter {
 	protected boolean shouldNotFilter(HttpServletRequest request) {
 		String path = request.getServletPath();
 
-		return path.equals("/users/signin") || path.equals("/patients/signup") || path.equals("/users/pwd-encryption")
+		return path.equals("/users/signin") || path.equals("/patient/register") || path.equals("/users/pwd-encryption")
 				|| path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs");
 	}
 

@@ -1,17 +1,20 @@
 package com.backend.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.PatientDTO;
-import com.backend.dtos.PatientReqDTO;
 import com.backend.dtos.PatientRespDTO;
-import com.backend.entity.BloodGroup;
+import com.backend.dtos.UpdatePatientDTO;
 import com.backend.entity.Patient;
+import com.backend.entity.Role;
+import com.backend.entity.Status;
 import com.backend.entity.User;
 import com.backend.repository.PatientRepository;
 import com.backend.repository.UserRepository;
@@ -21,42 +24,100 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PatientServiceImpl implements PatientService{
-	@Autowired
+public class PatientServiceImpl implements PatientService {
+
 	private final PatientRepository patientRepository;
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
+
+	private final PasswordEncoder passwordEncoder;
+
+	@Override
+	public List<PatientRespDTO> getAllPatients() {
+		return patientRepository.findAll().stream().map(PatientRespDTO::new).toList();
+	}
+
 	@Override
 	public Optional<PatientDTO> getPatientDetailsByUserId(Long userId) {
-	
+
 		return patientRepository.findByUser_Id(userId).map(PatientDTO::new);
 	}
 
 	@Override
-	public PatientRespDTO addPatient(PatientReqDTO dto) {
-		
-		User user=userRepository.findById(dto.getUserId()).orElseThrow();
-		Patient patient =modelMapper.map(dto, Patient.class);
+	public PatientDTO addPatient(CreatePatientDTO dto) {
+
+		/* -------- Email uniqueness check -------- */
+		if (userRepository.existsByEmail(dto.getEmail())) {
+			throw new RuntimeException("Email already exists");
+		}
+
+		/* -------- Create User -------- */
+		User user = new User();
+		user.setFirstname(dto.getFirstname());
+		user.setLastname(dto.getLastname());
+		user.setEmail(dto.getEmail());
+		user.setPhone(dto.getPhone());
+		user.setGender(dto.getGender());
+		user.setDob(dto.getDob());
+		user.setStatus(dto.getStatus());
+		user.setRole(Role.ROLE_PATIENT);
+
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+		userRepository.save(user);
+
+		/* -------- Create Patient -------- */
+		Patient patient = new Patient();
 		patient.setUser(user);
-		
-		Patient savedPatient=patientRepository.save(patient);
-		PatientRespDTO resp=modelMapper.map(savedPatient, PatientRespDTO.class);
-		resp.setPatientId(savedPatient.getId());
-		resp.setUserId(user.getId());
-		resp.setFirstname(user.getFirstname());
-		resp.setLastname(user.getLastname());
-		resp.setEmail(user.getEmail());
-		resp.setPhone(user.getPhone());
-		resp.setGender(user.getGender());
-		resp.setDob(user.getDob().toLocalDate());
-		resp.setStatus(user.getStatus());
-		resp.setBloodGroup(savedPatient.getBloodGroup());
-		resp.setMedicalHistory(savedPatient.getMedicalHistory());
-		resp.setAdmitDate(savedPatient.getAdmitDate());
-		resp.setDischargeDate(savedPatient.getDischargeDate());
-		return resp;
+		patient.setBloodGroup(dto.getBloodGroup());
+		patient.setMedicalHistory(dto.getMedicalHistory());
+
+		patientRepository.save(patient);
+
+		return new PatientDTO(patient);
 	}
-	
-	
+
+	@Override
+	public PatientDTO updatePatient(Long patientId, UpdatePatientDTO dto) {
+
+		Patient patient = patientRepository.findById(patientId)
+				.orElseThrow(() -> new RuntimeException("Patient not found"));
+
+		/* -------- Update Patient fields -------- */
+		patient.setBloodGroup(dto.getBloodGroup());
+		patient.setMedicalHistory(dto.getMedicalHistory());
+
+		/* -------- Update User fields -------- */
+		User user = patient.getUser();
+		user.setFirstname(dto.getFirstname());
+		user.setLastname(dto.getLastname());
+		user.setPhone(dto.getPhone());
+		user.setGender(dto.getGender());
+		user.setDob(dto.getDob());
+		user.setStatus(dto.getStatus());
+
+		// JPA dirty checking will persist changes
+		return new PatientDTO(patient);
+	}
+
+	@Override
+	public List<PatientRespDTO> getPatientsByDoctorId(Long doctorId) {
+		return patientRepository.findPatientsByDoctorId(doctorId).stream()
+				.map(p -> modelMapper.map(p, PatientRespDTO.class)).toList();
+
+	}
+
+	@Override
+	public void updateStatus(Long patientId, Status status) {
+
+		User user = patientRepository.findUserByPatientId(patientId);
+
+		if (user.getStatus() == status) {
+			return;
+		}
+
+		user.setStatus(status);
+
+	}
 
 }

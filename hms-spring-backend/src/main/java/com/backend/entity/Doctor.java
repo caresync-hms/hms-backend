@@ -6,19 +6,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@AttributeOverride(
-	    name = "id",
-	    column = @Column(name = "doctor_id")
-	)
-public class Doctor extends Base  {
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@AttributeOverride(name = "id", column = @Column(name = "doctor_id"))
+public class Doctor extends Base {
 	@OneToOne
-	@JoinColumn(name="user_id")
-	private User user ;
-	@Column(name="specialization")
-	private String specilization ;
+	@JoinColumn(name = "user_id")
+	private User user;
+	@Column(name = "specialization")
+	private String specialization;
 	@ManyToOne
-	@JoinColumn(name="dept_id")
-	private Department dept ;
+	@JoinColumn(name = "dept_id")
+	private Department dept;
 }

@@ -46,7 +46,7 @@ public class PatientDTO {
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.gender = user.getGender();
-        this.dob = user.getDob().toLocalDate();
+        this.dob = user.getDob();
         this.status = user.getStatus();
 
         this.bloodGroup = patient.getBloodGroup();

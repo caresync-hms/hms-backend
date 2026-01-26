@@ -4,14 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.PatientDTO;
-import com.backend.dtos.PatientReqDTO;
 import com.backend.dtos.PatientRespDTO;
+import com.backend.dtos.UpdatePatientDTO;
 import com.backend.entity.Patient;
+import com.backend.entity.Role;
 import com.backend.entity.Status;
 import com.backend.entity.User;
 import com.backend.repository.PatientRepository;
@@ -23,10 +25,12 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class PatientServiceImpl implements PatientService {
-	@Autowired
+
 	private final PatientRepository patientRepository;
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
+
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<PatientRespDTO> getAllPatients() {
@@ -40,55 +44,60 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public PatientRespDTO addPatient(PatientReqDTO dto) {
+	public PatientDTO addPatient(CreatePatientDTO dto) {
 
-		User user = userRepository.findById(dto.getUserId()).orElseThrow();
-		Patient patient = modelMapper.map(dto, Patient.class);
+		/* -------- Email uniqueness check -------- */
+		if (userRepository.existsByEmail(dto.getEmail())) {
+			throw new RuntimeException("Email already exists");
+		}
+
+		/* -------- Create User -------- */
+		User user = new User();
+		user.setFirstname(dto.getFirstname());
+		user.setLastname(dto.getLastname());
+		user.setEmail(dto.getEmail());
+		user.setPhone(dto.getPhone());
+		user.setGender(dto.getGender());
+		user.setDob(dto.getDob());
+		user.setStatus(dto.getStatus());
+		user.setRole(Role.ROLE_PATIENT);
+
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+		userRepository.save(user);
+
+		/* -------- Create Patient -------- */
+		Patient patient = new Patient();
 		patient.setUser(user);
+		patient.setBloodGroup(dto.getBloodGroup());
+		patient.setMedicalHistory(dto.getMedicalHistory());
 
-		Patient savedPatient = patientRepository.save(patient);
-		PatientRespDTO resp = modelMapper.map(savedPatient, PatientRespDTO.class);
-		resp.setPatientId(savedPatient.getId());
-		resp.setUserId(user.getId());
-		resp.setFirstname(user.getFirstname());
-		resp.setLastname(user.getLastname());
-		resp.setEmail(user.getEmail());
-		resp.setPhone(user.getPhone());
-		resp.setGender(user.getGender());
-		resp.setDob(user.getDob());
-		resp.setStatus(user.getStatus());
-		resp.setBloodGroup(savedPatient.getBloodGroup());
-		resp.setMedicalHistory(savedPatient.getMedicalHistory());
-		resp.setAdmitDate(savedPatient.getAdmitDate());
-		resp.setDischargeDate(savedPatient.getDischargeDate());
-		return resp;
+		patientRepository.save(patient);
+
+		return new PatientDTO(patient);
 	}
 
 	@Override
-	public PatientRespDTO updatePatient(Long patientId, PatientReqDTO dto) {
-		Patient patient = patientRepository.findById(patientId).orElseThrow();
+	public PatientDTO updatePatient(Long patientId, UpdatePatientDTO dto) {
+
+		Patient patient = patientRepository.findById(patientId)
+				.orElseThrow(() -> new RuntimeException("Patient not found"));
+
+		/* -------- Update Patient fields -------- */
 		patient.setBloodGroup(dto.getBloodGroup());
 		patient.setMedicalHistory(dto.getMedicalHistory());
-		patient.setAdmitDate(dto.getAdmitDate());
-		patient.setDischargeDate(dto.getDischargeDate());
-		Patient updated = patientRepository.save(patient);
-		PatientRespDTO resp = new PatientRespDTO();
-		resp.setPatientId(updated.getId());
-		resp.setUserId(updated.getUser().getId());
 
-		resp.setFirstname(updated.getUser().getFirstname());
-		resp.setLastname(updated.getUser().getLastname());
-		resp.setEmail(updated.getUser().getEmail());
-		resp.setPhone(updated.getUser().getPhone());
-		resp.setGender(updated.getUser().getGender());
-		resp.setDob(updated.getUser().getDob());
-		resp.setStatus(updated.getUser().getStatus());
+		/* -------- Update User fields -------- */
+		User user = patient.getUser();
+		user.setFirstname(dto.getFirstname());
+		user.setLastname(dto.getLastname());
+		user.setPhone(dto.getPhone());
+		user.setGender(dto.getGender());
+		user.setDob(dto.getDob());
+		user.setStatus(dto.getStatus());
 
-		resp.setBloodGroup(updated.getBloodGroup());
-		resp.setMedicalHistory(updated.getMedicalHistory());
-		resp.setAdmitDate(updated.getAdmitDate());
-		resp.setDischargeDate(updated.getDischargeDate());
-		return resp;
+		// JPA dirty checking will persist changes
+		return new PatientDTO(patient);
 	}
 
 	@Override

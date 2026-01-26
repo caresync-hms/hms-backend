@@ -208,7 +208,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		appointment.setDoctor(doctor);
 		appointment.setPatient(patient);
 		appointment.setDateOfAppointment(dto.getDateOfAppointment());
-		appointment.setStatus(AppointmentStatus.BOOKED);
+		appointment.setStatus(AppointmentStatus.SCHEDULED);
 
 		Appointment saved = appointmentRepository.save(appointment);
 

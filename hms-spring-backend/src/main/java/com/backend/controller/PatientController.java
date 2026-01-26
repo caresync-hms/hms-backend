@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.dtos.ApiResponse;
-import com.backend.dtos.PatientReqDTO;
+import com.backend.dtos.CreatePatientDTO;
+import com.backend.dtos.PatientDTO;
 import com.backend.dtos.StatusUpdateDTO;
+import com.backend.dtos.UpdatePatientDTO;
 import com.backend.service.PatientService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,12 +47,8 @@ public class PatientController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> addPatient(@RequestBody PatientReqDTO dto) {
-		try {
-			return ResponseEntity.ok(patientService.addPatient(dto));
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
-		}
+	public ResponseEntity<PatientDTO> addPatient(@RequestBody CreatePatientDTO dto) {
+		return ResponseEntity.ok(patientService.addPatient(dto));
 	}
 
 	@GetMapping("doctor/{doctorId}")
@@ -63,13 +61,8 @@ public class PatientController {
 	}
 
 	@PutMapping("/{patientId}")
-	public ResponseEntity<?> updatePatient(@PathVariable Long patientId, @RequestBody PatientReqDTO dto) {
-		try {
-			return ResponseEntity.ok(patientService.updatePatient(patientId, dto));
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
-		}
-
+	public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long patientId, @RequestBody UpdatePatientDTO dto) {
+		return ResponseEntity.ok(patientService.updatePatient(patientId, dto));
 	}
 
 	@PatchMapping("/{id}/status")

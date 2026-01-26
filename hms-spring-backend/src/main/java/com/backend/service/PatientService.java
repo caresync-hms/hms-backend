@@ -3,18 +3,19 @@ package com.backend.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.PatientDTO;
-import com.backend.dtos.PatientReqDTO;
 import com.backend.dtos.PatientRespDTO;
+import com.backend.dtos.UpdatePatientDTO;
 import com.backend.entity.Status;
 
 public interface PatientService {
 
 	Optional<PatientDTO> getPatientDetailsByUserId(Long userId);
 
-	PatientRespDTO addPatient(PatientReqDTO dto);
+	PatientDTO addPatient(CreatePatientDTO dto);
 
-	PatientRespDTO updatePatient(Long patientId, PatientReqDTO dto);
+	PatientDTO updatePatient(Long patientId, UpdatePatientDTO dto);
 
 	List<PatientRespDTO> getPatientsByDoctorId(Long doctorId);
 

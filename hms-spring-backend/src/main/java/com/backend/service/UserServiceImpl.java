@@ -1,5 +1,7 @@
 package com.backend.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -9,7 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.custom_exceptions.ResourceNotFoundException;
 import com.backend.dtos.ApiResponse;
+import com.backend.dtos.UserRegDTO;
 import com.backend.dtos.UserResp;
+import com.backend.dtos.UserRespDTO;
+import com.backend.entity.Gender;
+import com.backend.entity.Role;
+import com.backend.entity.Status;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
 
@@ -54,5 +61,32 @@ public class UserServiceImpl implements UserService {
 		users.forEach(user ->
 		 user.setPassword(passwordEncoder.encode(user.getPassword())));
 		return new ApiResponse("Password encrypted", "Success");
+	}
+
+
+
+	@Override
+	public UserRespDTO registerUser(UserRegDTO dto) {
+		// TODO Auto-generated method stub
+		User user = new User();
+		user.setFirstname(dto.getFirstName());
+		
+		user.setLastname(dto.getLastName());
+		user.setEmail(dto.getEmail());
+		user.setPassword("na");
+		  user.setUsername(dto.getEmail()); 
+		 user.setStatus(Status.ACTIVE); 
+		user.setPhone(dto.getPhone());
+		user.setRole(Role.ROLE_PATIENT);
+		user.setDob(LocalDateTime.now());
+		user.setGender(dto.getGender());
+		userRepository.save(user);
+
+		UserRespDTO resp = new UserRespDTO();
+		resp.setId(user.getId());
+		resp.setFirstname(user.getFirstname());
+		resp.setRole(user.getRole());
+
+		return resp;
 	}
 }

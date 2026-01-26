@@ -20,7 +20,7 @@ public class PatientRespDTO {
 	private Long patientId;
     private Long userId;
 
-    private String firstname;
+    private String firstName;
     private String lastname;
     private String email;
     private String phone;
@@ -38,12 +38,12 @@ public class PatientRespDTO {
 
         User user = patient.getUser();
         this.userId = user.getId();
-        this.firstname = user.getFirstname();
+        this.firstName = user.getFirstname();
         this.lastname = user.getLastname();
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.gender = user.getGender();
-        this.dob = user.getDob();
+        this.dob = user.getDob().toLocalDate();
         this.status = user.getStatus();
 
         this.bloodGroup = patient.getBloodGroup();

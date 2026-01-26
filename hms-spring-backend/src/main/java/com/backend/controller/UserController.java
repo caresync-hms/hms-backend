@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.custom_exceptions.InvalidInputException;
 import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResp;
+import com.backend.dtos.UserRegDTO;
 import com.backend.dtos.UserResp;
+import com.backend.dtos.UserRespDTO;
 import com.backend.entity.User;
 import com.backend.security.JWTUtils;
 import com.backend.service.UserService;
@@ -53,7 +55,7 @@ public class UserController {
 		return ResponseEntity.ok(users);
 	}
 
-	@GetMapping("/{userId}")
+	@GetMapping("/id/{userId}")
 
 	@Operation(description = "Get user details by id ")
 	public ResponseEntity<?> getUserDetailsById(@PathVariable @Min(1) @Max(100) Long userId) {
@@ -90,5 +92,10 @@ public class UserController {
 		return ResponseEntity.ok(userService.encryptPassword());
 
 	}
+	@PostMapping("/register")
+	public UserRespDTO register(@RequestBody UserRegDTO dto) {
+	    return userService.registerUser(dto);
+	}
+
 
 }

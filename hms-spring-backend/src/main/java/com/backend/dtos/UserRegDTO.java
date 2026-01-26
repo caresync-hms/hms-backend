@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.backend.entity.Gender;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
@@ -20,6 +22,7 @@ public class UserRegDTO {
 	private String lastName;
 	private String email;
 	private String password;
+	 private Gender gender;
 	@NotBlank
 	@Pattern(regexp = "^[6-9]\\d{9}$", message = "Invalid Indian Phone no")
 	private String phone;

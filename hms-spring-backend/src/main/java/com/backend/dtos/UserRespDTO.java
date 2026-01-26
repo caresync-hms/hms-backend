@@ -6,9 +6,13 @@ import com.backend.entity.Gender;
 import com.backend.entity.Role;
 import com.backend.entity.Status;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserRespDTO {
 	 private Long id;
 	    private String username;

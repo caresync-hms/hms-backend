@@ -17,4 +17,6 @@ public interface PatientService {
 	PatientRespDTO updatePatient(Long patientId, PatientReqDTO dto);
 	
 	List<PatientRespDTO> getPatientsByDoctorId(Long doctorId);
+
+	 List<PatientRespDTO> getAllPatients();
 }

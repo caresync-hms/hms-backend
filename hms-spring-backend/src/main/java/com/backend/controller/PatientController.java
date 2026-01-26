@@ -66,4 +66,9 @@ public class PatientController {
 	        
 	    }
 	
+	  @GetMapping
+	  public ResponseEntity<?> getAllPatients() {
+	      return ResponseEntity.ok(patientService.getAllPatients());
+	  }
+
 }

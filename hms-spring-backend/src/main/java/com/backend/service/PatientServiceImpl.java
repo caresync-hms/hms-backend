@@ -13,6 +13,7 @@ import com.backend.dtos.PatientReqDTO;
 import com.backend.dtos.PatientRespDTO;
 import com.backend.entity.BloodGroup;
 import com.backend.entity.Patient;
+import com.backend.entity.Payment;
 import com.backend.entity.User;
 import com.backend.repository.PatientRepository;
 import com.backend.repository.UserRepository;
@@ -44,12 +45,12 @@ public class PatientServiceImpl implements PatientService{
 		PatientRespDTO resp=modelMapper.map(savedPatient, PatientRespDTO.class);
 		resp.setPatientId(savedPatient.getId());
 		resp.setUserId(user.getId());
-		resp.setFirstname(user.getFirstname());
+		resp.setFirstName(user.getFirstname());
 		resp.setLastname(user.getLastname());
 		resp.setEmail(user.getEmail());
 		resp.setPhone(user.getPhone());
 		resp.setGender(user.getGender());
-		resp.setDob(user.getDob());
+		resp.setDob(user.getDob().toLocalDate());
 		resp.setStatus(user.getStatus());
 		resp.setBloodGroup(savedPatient.getBloodGroup());
 		resp.setMedicalHistory(savedPatient.getMedicalHistory());
@@ -70,12 +71,12 @@ public class PatientServiceImpl implements PatientService{
         resp.setPatientId(updated.getId());
         resp.setUserId(updated.getUser().getId());
 
-        resp.setFirstname(updated.getUser().getFirstname());
+        resp.setFirstName(updated.getUser().getFirstname());
         resp.setLastname(updated.getUser().getLastname());
         resp.setEmail(updated.getUser().getEmail());
         resp.setPhone(updated.getUser().getPhone());
         resp.setGender(updated.getUser().getGender());
-        resp.setDob(updated.getUser().getDob());
+        resp.setDob(updated.getUser().getDob().toLocalDate());
         resp.setStatus(updated.getUser().getStatus());
 
         resp.setBloodGroup(updated.getBloodGroup());
@@ -91,5 +92,26 @@ public class PatientServiceImpl implements PatientService{
 	 
 	}
 	
+	public List<PatientRespDTO> getAllPatients() {
+	    return patientRepository.findAll()
+	            .stream()
+	            .map(patient-> { PatientRespDTO dto = new PatientRespDTO();
+	            dto.setPatientId(patient.getId());
+	            dto.setUserId(patient.getUser().getId());
+	            dto.setFirstName(patient.getUser().getFirstname());
+	            dto.setEmail(patient.getUser().getEmail());
+	            dto.setPhone(patient.getUser().getPhone());
+	            dto.setGender(patient.getUser().getGender());
+	            dto.setBloodGroup(patient.getBloodGroup());
+	            dto.setMedicalHistory(patient.getMedicalHistory());
+	            return dto;})
+	            .toList();
+	}
+	
+	/*@Override
+	public List<Payment> getAllPayments() {
+	    return paymentRepository.findAll();
+	}*/
+
 
 }

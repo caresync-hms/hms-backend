@@ -34,7 +34,8 @@ public class SecurityConfiguration {
 		http.cors(cors -> cors.configurationSource(null));
 		http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.authorizeHttpRequests(request -> request
-				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users/signin", "/patients/signup", "/doctors",
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users/signin", "/users/register",   "/patient/**",
+					    "/api/patients/**", "/patients/signup", "/doctors",  "/receptionist/**",
 						"/users/pwd-encryption")
 				.permitAll().requestMatchers(HttpMethod.OPTIONS).permitAll()
 				.requestMatchers(HttpMethod.POST, "/appointments/book").hasRole("PATIENT")

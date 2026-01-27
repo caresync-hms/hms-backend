@@ -32,6 +32,10 @@ private Doctor doctor ;
 @ManyToOne
 @JoinColumn(name = "patient_id")
 private Patient patient ;
+@JoinColumn(name = "issueDate")
 private LocalDateTime issueDate ;
+@JoinColumn(name = "advice")
 private String advice ;
+@JoinColumn(name = "medicine")
+private String medicine ;
 }

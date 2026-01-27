@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.PatientDTO;
+import com.backend.dtos.PatientIdDTO;
 import com.backend.dtos.PatientRespDTO;
 import com.backend.dtos.UpdatePatientDTO;
 import com.backend.entity.Patient;
@@ -118,6 +119,22 @@ public class PatientServiceImpl implements PatientService {
 
 		user.setStatus(status);
 
+	}
+
+	@Override
+	public PatientIdDTO getPatientByUserId(Long userId) {
+
+	    Patient patient = patientRepository.findByUser_Id(userId)
+	            .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+	    PatientIdDTO dto = new PatientIdDTO();
+	    dto.setId(patient.getId());
+	    dto.setUserId(patient.getUser().getId());
+	    dto.setFirstname(patient.getUser().getFirstname());
+	    dto.setLastname(patient.getUser().getLastname());
+	    dto.setEmail(patient.getUser().getEmail());
+
+	    return dto;
 	}
 
 }

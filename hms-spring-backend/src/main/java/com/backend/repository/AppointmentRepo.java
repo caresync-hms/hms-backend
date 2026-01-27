@@ -177,18 +177,21 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 	
 	
 	@Query("""
-			    SELECT new com.backend.dtos.AppointmentByPatientDto(
-			        CONCAT(d.user.firstname, ' ', d.user.lastname),
-			        d.specialization,
-			        a.dateOfAppointment,
-			        a.status
-			    )
-			    FROM Appointment a
-			    JOIN a.doctor d
-			    JOIN a.patient p
-			    WHERE p.id = :patientId
-			""")
-	List<AppointmentByPatientDto> getAppointmentsByPatientId(@Param("patientId") Long patientId);
+		    SELECT new com.backend.dtos.AppointmentByPatientDto(
+		        a.id,
+		        CONCAT(d.user.firstname, ' ', d.user.lastname),
+		        d.specialization,
+		        a.dateOfAppointment,
+		        a.status
+		    )
+		    FROM Appointment a
+		    JOIN a.doctor d
+		    JOIN a.patient p
+		    WHERE p.id = :patientId
+		""")
+		List<AppointmentByPatientDto> getAppointmentsByPatientId(
+		    @Param("patientId") Long patientId
+		);
 
 	boolean existsByDoctor_IdAndDateOfAppointment(Long doctorId, LocalDateTime dateOfAppointment);
 

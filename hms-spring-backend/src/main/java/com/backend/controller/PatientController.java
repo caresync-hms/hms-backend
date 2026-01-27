@@ -41,7 +41,7 @@ public class PatientController {
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> getPatientDetails(@PathVariable Long userId) {
 		try {
-			return ResponseEntity.ok(patientService.getPatientDetailsByUserId(userId));
+			return ResponseEntity.ok(patientService.getPatientByUserId(userId));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
 		}
@@ -55,7 +55,7 @@ public class PatientController {
 	@GetMapping("doctor/{doctorId}")
 	public ResponseEntity<?> getPatientByDoctor(@PathVariable Long doctorId) {
 		try {
-			return ResponseEntity.ok(patientService.getPatientDetailsByUserId(doctorId));
+			return ResponseEntity.ok(patientService.getPatientByUserId(doctorId));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), "Failed"));
 		}

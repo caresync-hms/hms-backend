@@ -12,7 +12,6 @@ import com.backend.entity.Patient;
 import com.backend.entity.User;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-	Optional<Patient> findByUser_Id(Long userId);
 
 	Optional<Patient> findByUserId(Long userId);
 

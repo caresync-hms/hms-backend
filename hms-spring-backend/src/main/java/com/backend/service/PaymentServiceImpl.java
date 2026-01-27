@@ -4,6 +4,8 @@ package com.backend.service;
 
 
 import java.time.LocalDate;
+
+/*import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -94,6 +96,113 @@ public class PaymentServiceImpl implements PaymentService {
 
 			   
 	}
+}*/
+
+
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.backend.dtos.PaymentDTO;
+import com.backend.dtos.PaymentRespDTO;
+import com.backend.entity.Invoice;
+import com.backend.entity.InvoiceStatus;
+import com.backend.entity.Payment;
+import com.backend.repository.InvoiceRepository;
+import com.backend.repository.PaymentRepository;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class PaymentServiceImpl implements PaymentService {
+
+    private final PaymentRepository paymentRepository;
+    private final InvoiceRepository invoiceRepository;
+
+    @Override
+    public PaymentRespDTO makePayment(PaymentDTO dto) {
+
+        if (dto.getInvoiceId() == null) {
+            throw new IllegalArgumentException("Invoice ID must not be null");
+        }
+
+        // 1️⃣ Load invoice
+        Invoice invoice = invoiceRepository.findById(dto.getInvoiceId())
+                .orElseThrow(() -> new RuntimeException("Invoice not found"));
+
+        // 2️⃣ Check invoice status
+        if (invoice.getStatus() == InvoiceStatus.PAID) {
+            throw new RuntimeException("Invoice already paid");
+        }
+
+       
+
+        // 4️⃣ Create payment
+        Payment payment = new Payment();
+        payment.setInvoice(invoice);
+        payment.setAmount(dto.getAmount());
+        payment.setPaymentMethod(dto.getPaymentMethod());
+        payment.setPaymentDate(LocalDate.now());
+
+        // 5️⃣ Update invoice status
+        invoice.setStatus(InvoiceStatus.PAID);
+        invoiceRepository.save(invoice);
+
+        // 6️⃣ Save payment
+        Payment saved = paymentRepository.save(payment);
+
+        // 7️⃣ Return response DTO
+        return new PaymentRespDTO(
+                saved.getId(),
+                invoice.getId(),
+                invoice.getPatient().getId(),
+                invoice.getPatient().getUser().getFirstname() + " " +
+                invoice.getPatient().getUser().getLastname(),
+                saved.getAmount(),
+                saved.getPaymentMethod(),
+                saved.getPaymentDate()
+        );
+    }
+
+    @Override
+    public List<PaymentRespDTO> getPaymentsByPatient(Long patientId) {
+        return paymentRepository.findByInvoicePatientId(patientId)
+                .stream()
+                .map(p -> new PaymentRespDTO(
+                        p.getId(),
+                        p.getInvoice().getId(),
+                        p.getInvoice().getPatient().getId(),
+                        p.getInvoice().getPatient().getUser().getFirstname() + " " +
+                        p.getInvoice().getPatient().getUser().getLastname(),
+                        p.getAmount(),
+                        p.getPaymentMethod(),
+                        p.getPaymentDate()
+                ))
+                .toList();
+    }
+
+    @Override
+    public List<PaymentRespDTO> getAllPayments() {
+        return paymentRepository.findAll()
+                .stream()
+                .map(p -> new PaymentRespDTO(
+                        p.getId(),
+                        p.getInvoice().getId(),
+                        p.getInvoice().getPatient().getId(),
+                        p.getInvoice().getPatient().getUser().getFirstname() + " " +
+                        p.getInvoice().getPatient().getUser().getLastname(),
+                        p.getAmount(),
+                        p.getPaymentMethod(),
+                        p.getPaymentDate()
+                ))
+                .toList();
+    }
 }
+
 
 

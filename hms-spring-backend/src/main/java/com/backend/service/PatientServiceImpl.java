@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.PatientDTO;
+import com.backend.dtos.PatientIdDTO;
 import com.backend.dtos.PatientRespDTO;
 import com.backend.dtos.UpdatePatientDTO;
 import com.backend.entity.Patient;

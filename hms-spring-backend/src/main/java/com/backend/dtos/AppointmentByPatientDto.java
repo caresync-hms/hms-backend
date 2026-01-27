@@ -36,8 +36,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppointmentByPatientDto {
-
-    private String doctorName;
+	private Long appointmentId;   
+	private String doctorName;
     private String doctorSpecialization;
     private LocalDateTime dateOfAppointment;
     private AppointmentStatus appointmentStatus;

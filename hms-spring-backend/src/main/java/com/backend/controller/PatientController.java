@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.dtos.ApiResponse;
 import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.PatientDTO;
+import com.backend.dtos.PatientIdDTO;
 import com.backend.dtos.StatusUpdateDTO;
 import com.backend.dtos.UpdatePatientDTO;
 import com.backend.service.PatientService;
@@ -46,7 +47,7 @@ public class PatientController {
 		}
 	}
 
-	@PostMapping
+	@PostMapping({ "", "/register" })
 	public ResponseEntity<PatientDTO> addPatient(@RequestBody CreatePatientDTO dto) {
 		return ResponseEntity.ok(patientService.addPatient(dto));
 	}
@@ -71,5 +72,17 @@ public class PatientController {
 		patientService.updateStatus(id, dto.getStatus());
 		return ResponseEntity.noContent().build();
 	}
+	
+	@GetMapping("/user/{userId}")
+    public ResponseEntity<?> getPatientByUserId(@PathVariable Long userId) {
+
+        if (userId == null || userId <= 0) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse("Invalid userId", "Failed"));
+        }
+
+        return ResponseEntity.ok(patientService.getPatientByUserId(userId));
+    }
+
 
 }

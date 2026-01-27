@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.backend.custom_exceptions.ResourceNotFoundException;
 import com.backend.dtos.AddDoctorDTO;
+import com.backend.dtos.DoctorByUserDto;
 import com.backend.dtos.DoctorDTO;
 import com.backend.dtos.UpdateDoctorDTO;
 import com.backend.entity.Department;
@@ -114,5 +115,12 @@ public class DoctorServiceImpl implements DoctorService {
 		// JPA dirty checking → auto update
 		return new DoctorDTO(doctor);
 	}
+	
+	
+	 @Override
+	    public DoctorByUserDto getDoctorByUserId(Long userId) {
+
+	        return doctorRepository.findDoctorByUserId(userId);
+	    }
 
 }

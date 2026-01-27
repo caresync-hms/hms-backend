@@ -17,7 +17,7 @@ public class PrescriptionRespDTO {
 
     private Long patientId;
     private String patientName;
-
+    private String medicine ;
     private Long doctorId;
     private String doctorName;
 

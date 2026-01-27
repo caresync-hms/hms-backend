@@ -8,4 +8,5 @@ import lombok.Data;
 public class PrescriptionUpdateDTO {
 		private String notes;         
 	    private LocalDateTime issueDate;
+	    private String medicine;
 }

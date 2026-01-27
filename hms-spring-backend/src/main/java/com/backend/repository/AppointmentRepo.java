@@ -127,6 +127,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 
 	@Query("""
 			    SELECT new com.backend.dtos.AppointmentResponseDto(
+			    	a.id,
 			        a.dateOfAppointment,
 			        a.status,
 			        CONCAT(u.firstname, ' ', u.lastname),
@@ -210,4 +211,8 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 			    JOIN a.patient p
 			""")
 	List<AdminAppointmentDTO> findAllAdminAppointments();
+	
+	
+
+
 }

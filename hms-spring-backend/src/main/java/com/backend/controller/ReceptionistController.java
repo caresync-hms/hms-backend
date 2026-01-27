@@ -1,9 +1,5 @@
 package com.backend.controller;
 
-
-
-
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -14,8 +10,6 @@ import com.backend.dtos.InvoiceDTO;
 import com.backend.dtos.InvoiceRespDTO;
 import com.backend.dtos.PaymentDTO;
 import com.backend.dtos.PaymentRespDTO;
-import com.backend.entity.Invoice;
-import com.backend.entity.Payment;
 import com.backend.service.InvoiceService;
 import com.backend.service.PaymentService;
 
@@ -31,54 +25,61 @@ public class ReceptionistController {
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
 
-  
+    /* ===================== INVOICES ===================== */
+
+    // Create invoice for a patient
     @PostMapping("/invoices")
-    public ResponseEntity<Invoice> generateInvoice(@RequestBody InvoiceDTO dto) {
-        Invoice invoice = invoiceService.createInvoice(dto);
+    public ResponseEntity<InvoiceRespDTO> createInvoice(
+            @RequestBody InvoiceDTO dto) {
+
+        InvoiceRespDTO invoice = invoiceService.createInvoice(dto);
         return new ResponseEntity<>(invoice, HttpStatus.CREATED);
     }
 
-    
-    @GetMapping("/invoices/{invoiceId}")
-    public ResponseEntity<Invoice> getInvoiceById(@PathVariable Long invoiceId) {
-        return ResponseEntity.ok(invoiceService.getInvoiceById(invoiceId));
-    }
-
-    
+    // Get all invoices of a patient
     @GetMapping("/patients/{patientId}/invoices")
-    public ResponseEntity<?> getInvoicesByPatient(@PathVariable Long patientId) {
+    public ResponseEntity<List<InvoiceRespDTO>> getInvoicesByPatient(
+            @PathVariable Long patientId) {
+
         return ResponseEntity.ok(
                 invoiceService.getInvoicesByPatient(patientId)
         );
     }
+
+    // Get all invoices (optional but useful)
     @GetMapping("/invoices")
     public ResponseEntity<List<InvoiceRespDTO>> getAllInvoices() {
         return ResponseEntity.ok(invoiceService.getAllInvoices());
     }
 
+    /* ===================== PAYMENTS ===================== */
 
-    
-    //payments
-    
+    // Make payment for an invoice
     @PostMapping("/payments")
-    public ResponseEntity<Payment> makePayment(@RequestBody PaymentDTO dto) {
-        Payment payment = paymentService.makePayment(dto);
+    public ResponseEntity<PaymentRespDTO> makePayment(
+            @RequestBody PaymentDTO dto) {
+
+        PaymentRespDTO payment = paymentService.makePayment(dto);
         return new ResponseEntity<>(payment, HttpStatus.CREATED);
     }
 
-   
+    // Get all payments of a patient
     @GetMapping("/patients/{patientId}/payments")
-    public ResponseEntity<?> getPaymentsByPatient(@PathVariable Long patientId) {
+    public ResponseEntity<List<PaymentRespDTO>> getPaymentsByPatient(
+            @PathVariable Long patientId) {
+
         return ResponseEntity.ok(
                 paymentService.getPaymentsByPatient(patientId)
         );
     }
+
+    // Get all payments (optional)
     @GetMapping("/payments")
     public ResponseEntity<List<PaymentRespDTO>> getAllPayments() {
         return ResponseEntity.ok(paymentService.getAllPayments());
     }
-
 }
+
 
 
 

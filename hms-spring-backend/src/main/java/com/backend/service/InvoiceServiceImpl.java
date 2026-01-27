@@ -19,58 +19,69 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class InvoiceServiceImpl implements InvoiceService {
 
-	@Service
-	@RequiredArgsConstructor
-	@Transactional
-	public class InvoiceServiceImpl implements InvoiceService {
+    private final InvoiceRepository invoiceRepository;
+    private final PatientRepository patientRepository;
 
-	    private final InvoiceRepository invoiceRepository;
-	    private final PatientRepository patientRepository;
+    @Override
+    public InvoiceRespDTO createInvoice(InvoiceDTO dto) {
 
-	    @Override
-	    public Invoice createInvoice(InvoiceDTO dto) {
+        Patient patient = patientRepository.findById(dto.getPatientId())
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-	        Patient patient = patientRepository.findById(dto.getPatientId())
-	                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        Invoice invoice = new Invoice();
+        invoice.setPatient(patient);
+        invoice.setTotalAmount(dto.getAmount());
+        invoice.setStatus(InvoiceStatus.PENDING);
+        invoice.setCreatedDate(LocalDate.now());
 
-	        Invoice invoice = new Invoice();
-	        invoice.setPatient(patient);
-	        invoice.setTotalAmount(dto.getAmount());
-	        invoice.setStatus(InvoiceStatus.PENDING);
-	        invoice.setCreatedDate(LocalDate.now());
+        Invoice saved = invoiceRepository.save(invoice);
 
-	        return invoiceRepository.save(invoice);
-	    }
+        return mapToDTO(saved);
+    }
 
-	    @Override
-	    public Invoice getInvoiceById(Long invoiceId) {
-	        return invoiceRepository.findById(invoiceId)
-	                .orElseThrow(() -> new RuntimeException("Invoice not found"));
-	    }
+    @Override
+    public InvoiceRespDTO getInvoiceById(Long invoiceId) {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Invoice not found"));
 
-	    @Override
-	    public List<Invoice> getInvoicesByPatient(Long patientId) {
-	        return invoiceRepository.findByPatient_Id(patientId);
-	    }
-	    
-	    @Override
-	    public List<InvoiceRespDTO> getAllInvoices() {
-	        return invoiceRepository.findAll().stream()
-	            .map(inv -> new InvoiceRespDTO(
-	                inv.getId(),
-	                inv.getPatient().getId(),
-	                inv.getPatient().getUser().getFirstname()
-	                  + " " +
-	                  inv.getPatient().getUser().getLastname(),
-	                inv.getTotalAmount(),
-	                inv.getStatus().name(),
-	                inv.getCreatedDate()
-	            ))
-	            .toList();
-	    }
-		}
-	
+        return mapToDTO(invoice);
+    }
+
+    @Override
+    public List<InvoiceRespDTO> getInvoicesByPatient(Long patientId) {
+        return invoiceRepository.findByPatient_Id(patientId)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<InvoiceRespDTO> getAllInvoices() {
+        return invoiceRepository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    // ✅ Centralized mapper
+    private InvoiceRespDTO mapToDTO(Invoice inv) {
+        return new InvoiceRespDTO(
+                inv.getId(),
+                inv.getPatient().getId(),
+                inv.getPatient().getUser().getFirstname() + " " +
+                inv.getPatient().getUser().getLastname(),
+                inv.getTotalAmount(),
+                inv.getStatus().name(),
+                inv.getCreatedDate()
+        );
+    }
+}
+
 
 
 

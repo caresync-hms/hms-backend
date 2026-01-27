@@ -8,14 +8,23 @@ import com.backend.dtos.InvoiceDTO;
 import com.backend.dtos.InvoiceRespDTO;
 import com.backend.entity.Invoice;
 
+
+
+
+
 public interface InvoiceService {
 
-	    Invoice createInvoice(InvoiceDTO dto);
+    // Create invoice
+    InvoiceRespDTO createInvoice(InvoiceDTO dto);
 
-	    Invoice getInvoiceById(Long invoiceId);
+    // Get invoice by ID
+    InvoiceRespDTO getInvoiceById(Long invoiceId);
 
-	    List<Invoice> getInvoicesByPatient(Long patientId);
-	    List<InvoiceRespDTO> getAllInvoices();
-	}
+    // Get invoices of a patient
+    List<InvoiceRespDTO> getInvoicesByPatient(Long patientId);
+
+    // Get all invoices
+    List<InvoiceRespDTO> getAllInvoices();
+}
 
 

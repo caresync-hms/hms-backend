@@ -9,7 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.custom_exceptions.ResourceNotFoundException;
 import com.backend.dtos.ApiResponse;
+import com.backend.dtos.UpdateUserDTO;
+import com.backend.dtos.UserReqDTO;
 import com.backend.dtos.UserRespDTO;
+import com.backend.entity.Status;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
 
@@ -19,14 +22,13 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-	// depcy
+
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<UserRespDTO> getAllUsers() {
-		// TODO Auto-generated method stub
 		return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserRespDTO.class)).toList();
 	}
 
@@ -40,10 +42,47 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ApiResponse encryptPassword() {
-		// get all users
+
 		List<User> users = userRepository.findAll();
-		// user - persistent
+
 		users.forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
 		return new ApiResponse("Password encrypted", "Success");
+	}
+
+	@Override
+	public UserRespDTO addUser(UserReqDTO dto) {
+
+		if (userRepository.existsByEmail(dto.getEmail())) {
+			throw new RuntimeException("Email already exists");
+		}
+
+		User user = modelMapper.map(dto, User.class);
+
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+		User savedUser = userRepository.save(user);
+
+		return modelMapper.map(savedUser, UserRespDTO.class);
+	}
+
+	@Override
+	public UserRespDTO updateUser(Long userId, UpdateUserDTO dto) {
+
+		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+		modelMapper.map(dto, user);
+
+		User updatedUser = userRepository.save(user);
+
+		return modelMapper.map(updatedUser, UserRespDTO.class);
+	}
+
+	@Override
+	public void updateUserStatus(Long userId, Status status) {
+
+		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+		user.setStatus(status);
+		userRepository.save(user);
 	}
 }

@@ -3,28 +3,18 @@ package com.backend.dtos;
 import java.time.LocalDate;
 
 import com.backend.entity.Gender;
-import com.backend.entity.Role;
 import com.backend.entity.Status;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
 import lombok.Data;
 
 @Data
-public class UserReqDTO {
+public class UpdateUserDTO {
 
 	private String firstname;
 	private String lastname;
-	@NotBlank
-	private String email;
-	@NotBlank
-	private String password;
-	@NotBlank
 	private String phone;
 	private String address;
 	private Gender gender;
-	@Past
 	private LocalDate dob;
-	private Role role;
 	private Status status;
 }

@@ -79,4 +79,9 @@ public class User extends Base implements UserDetails {
 
 		return this.email;
 	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.status == Status.ACTIVE;
+	}
 }

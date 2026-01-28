@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.PatientDTO;
-import com.backend.dtos.PatientIdDTO;
 import com.backend.dtos.PatientRespDTO;
 import com.backend.dtos.UpdatePatientDTO;
 import com.backend.entity.Patient;
@@ -36,12 +35,6 @@ public class PatientServiceImpl implements PatientService {
 	public List<PatientRespDTO> getAllPatients() {
 		return patientRepository.findAll().stream().map(PatientRespDTO::new).toList();
 	}
-
-//	@Override
-//	public Optional<PatientDTO> getPatientDetailsByUserId(Long userId) {
-//
-//		return patientRepository.findByUser_Id(userId).map(PatientDTO::new);
-//	}
 
 	@Override
 	public PatientDTO addPatient(CreatePatientDTO dto) {

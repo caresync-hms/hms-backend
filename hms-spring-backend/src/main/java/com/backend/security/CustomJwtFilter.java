@@ -53,7 +53,9 @@ public class CustomJwtFilter extends OncePerRequestFilter {
 			JWTDTO dto = new JWTDTO(userId, role);
 
 			UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(dto, null,
-					List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+					List.of(new SimpleGrantedAuthority(role)));
+
+			log.info("Granted authorities: {}", auth.getAuthorities());
 
 			SecurityContextHolder.getContext().setAuthentication(auth);
 			log.info("security context populated");

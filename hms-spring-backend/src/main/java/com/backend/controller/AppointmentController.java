@@ -3,7 +3,6 @@ package com.backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +21,6 @@ import com.backend.dtos.AppointmentUpdateRequestDto;
 import com.backend.service.AppointmentService;
 
 import lombok.RequiredArgsConstructor;
-
 
 @RestController
 @RequestMapping("/appointments")
@@ -44,6 +42,7 @@ public class AppointmentController {
 
 	@PostMapping("/book")
 	public ResponseEntity<?> bookAppointment(@RequestBody AppointmentBookingRequestDto dto) {
+
 		try {
 			AppointmentBookingDto response = appointmentService.bookAppointment(dto);
 			return ResponseEntity.ok(response);
@@ -77,19 +76,19 @@ public class AppointmentController {
 
 		return ResponseEntity.ok(appointmentService.getAppointmentsByDoctorId(doctorId));
 	}
-	
-	 // Accept appointment
-    @PutMapping("/{appointmentId}/accept")
-    public ResponseEntity<Void> acceptAppointment(@PathVariable Long appointmentId) {
-        appointmentService.acceptAppointment(appointmentId);
-        return ResponseEntity.ok().build();
-    }
 
-    // Reject appointment
-    @PutMapping("/{appointmentId}/reject")
-    public ResponseEntity<Void> rejectAppointment(@PathVariable Long appointmentId) {
-        appointmentService.rejectAppointment(appointmentId);
-        return ResponseEntity.ok().build();
-    }
-	
+	// Accept appointment
+	@PutMapping("/{appointmentId}/accept")
+	public ResponseEntity<Void> acceptAppointment(@PathVariable Long appointmentId) {
+		appointmentService.acceptAppointment(appointmentId);
+		return ResponseEntity.ok().build();
+	}
+
+	// Reject appointment
+	@PutMapping("/{appointmentId}/reject")
+	public ResponseEntity<Void> rejectAppointment(@PathVariable Long appointmentId) {
+		appointmentService.rejectAppointment(appointmentId);
+		return ResponseEntity.ok().build();
+	}
+
 }

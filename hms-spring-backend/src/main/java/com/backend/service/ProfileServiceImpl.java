@@ -44,6 +44,13 @@ public class ProfileServiceImpl implements ProfileService {
 			return new DoctorDTO(doctor);
 		}
 
+		case ROLE_RECEPTIONIST -> {
+			User receptionistUser = userRepository.findById(userId)
+					.orElseThrow(() -> new RuntimeException("Receptionist profile not found"));
+
+			return mapper.map(receptionistUser, UserRespDTO.class);
+		}
+
 		case ROLE_ADMIN -> {
 			User adminUser = userRepository.findById(userId)
 					.orElseThrow(() -> new RuntimeException("Admin profile not found"));

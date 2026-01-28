@@ -26,8 +26,6 @@ import com.backend.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,8 +45,7 @@ public class UserController {
 		System.out.println("in get all users");
 		List<UserRespDTO> users = userService.getAllUsers();
 		if (users.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT) // SC 204
-					.build();
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}
 		return ResponseEntity.ok(users);
 	}
@@ -56,7 +53,7 @@ public class UserController {
 	@GetMapping("/{userId}")
 
 	@Operation(description = "Get user details by id ")
-	public ResponseEntity<?> getUserDetailsById(@PathVariable @Min(1) @Max(100) Long userId) {
+	public ResponseEntity<?> getUserDetailsById(@PathVariable Long userId) {
 		System.out.println("in get user dtls " + userId);
 
 		return ResponseEntity.ok(userService.getUserDetails(userId));

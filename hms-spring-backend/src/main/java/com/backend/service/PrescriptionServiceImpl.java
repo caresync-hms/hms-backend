@@ -93,7 +93,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 	public PrescriptionRespDTO updatePrescription(Long id, PrescriptionUpdateDTO dto) {
 		Prescription prescription = prescriptionRepository.findById(id).orElseThrow();
 		prescription.setAdvice(dto.getNotes());
-		prescription.setIssueDate(dto.getIssueDate());
 		prescription.setMedicine(dto.getMedicine());
 		Prescription updated = prescriptionRepository.save(prescription);
 

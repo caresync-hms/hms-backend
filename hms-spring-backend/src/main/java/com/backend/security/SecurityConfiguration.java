@@ -40,10 +40,9 @@ public class SecurityConfiguration {
 				.requestMatchers(HttpMethod.POST, "/appointments/book").hasRole("PATIENT")
 				.requestMatchers("/appointments/doctors/{userId}/upcoming", "/doctors/{userId}")
 				.hasAnyRole("DOCTOR", "ADMIN").requestMatchers(HttpMethod.GET, "/patients").hasRole("ADMIN")
-				 // Receptionist APIs
-	            .requestMatchers("/receptionist/**").hasRole("RECEPTIONIST")
-	            .requestMatchers("/patients/**").hasRole("RECEPTIONIST")
-				.anyRequest().authenticated())
+				// Receptionist APIs
+				.requestMatchers("/receptionist/**").hasRole("RECEPTIONIST").requestMatchers("/patients/**")
+				.hasRole("RECEPTIONIST").anyRequest().authenticated())
 				.addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 		// enable Basic Auth scheme

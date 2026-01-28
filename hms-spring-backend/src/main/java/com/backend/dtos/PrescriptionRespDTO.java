@@ -33,6 +33,7 @@ public class PrescriptionRespDTO {
         this.patientId = p.getPatient().getId();
         this.dateIssued = p.getIssueDate();
         this.notes = p.getAdvice();
+        this.medicine=p.getMedicine();
     }
 
 }

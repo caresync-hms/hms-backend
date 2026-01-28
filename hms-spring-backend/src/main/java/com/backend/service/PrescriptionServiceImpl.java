@@ -41,6 +41,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 		Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow();
 
 		Prescription prescription = new Prescription();
+		prescription.setMedicine(dto.getMedicane());
 		prescription.setDoctor(doctor);
 		prescription.setAppointment(appointment);
 		prescription.setPatient(patient);
@@ -93,7 +94,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 		Prescription prescription = prescriptionRepository.findById(id).orElseThrow();
 		prescription.setAdvice(dto.getNotes());
 		prescription.setIssueDate(dto.getIssueDate());
-
+		prescription.setMedicine(dto.getMedicine());
 		Prescription updated = prescriptionRepository.save(prescription);
 
 		return new PrescriptionRespDTO(updated);
@@ -109,7 +110,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
 		dto.setDoctorId(p.getDoctor().getId());
 		dto.setDoctorName(p.getDoctor().getUser().getFirstname() + " " + p.getDoctor().getUser().getLastname());
-
+		dto.setMedicine(p.getMedicine());
 		dto.setAppointmentId(p.getAppointment().getId());
 		dto.setDateIssued(p.getIssueDate());
 		dto.setNotes(p.getAdvice());

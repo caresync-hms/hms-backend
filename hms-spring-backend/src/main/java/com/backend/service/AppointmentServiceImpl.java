@@ -162,6 +162,7 @@ import com.backend.repository.AppointmentRepo;
 import com.backend.repository.DoctorRepository;
 import com.backend.repository.PatientRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -241,7 +242,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 				.orElseThrow(() -> new RuntimeException("Appointment not found"));
 
 		appointment.setDateOfAppointment(dto.getDateOfAppointment());
-
+		
 		Appointment updated = appointmentRepository.save(appointment);
 
 		AppointmentBookingDto response = new AppointmentBookingDto();
@@ -273,4 +274,22 @@ public class AppointmentServiceImpl implements AppointmentService {
 		// ✅ Fetch appointments
 		return appointmentRepository.findAppointmentsByDoctorId(doctor.getId());
 	}
+	
+	@Override
+    public void acceptAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        appointment.setStatus(AppointmentStatus.ACCEPTED);
+        appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public void rejectAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        appointment.setStatus(AppointmentStatus.REJECTED);
+        appointmentRepository.save(appointment);
+    }
 }

@@ -21,4 +21,8 @@ public interface AppointmentService {
     AppointmentBookingDto updateAppointmentDate(AppointmentUpdateRequestDto dto);
     List<AdminAppointmentDTO> getAllAdminAppointments();
     List<AppointmentResponseDto> getAppointmentsByDoctorId(Long doctorId);
+    void acceptAppointment(Long appointmentId);
+
+    void rejectAppointment(Long appointmentId);
+
 }

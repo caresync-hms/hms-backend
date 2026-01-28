@@ -77,5 +77,19 @@ public class AppointmentController {
 
 		return ResponseEntity.ok(appointmentService.getAppointmentsByDoctorId(doctorId));
 	}
+	
+	 // Accept appointment
+    @PutMapping("/{appointmentId}/accept")
+    public ResponseEntity<Void> acceptAppointment(@PathVariable Long appointmentId) {
+        appointmentService.acceptAppointment(appointmentId);
+        return ResponseEntity.ok().build();
+    }
 
+    // Reject appointment
+    @PutMapping("/{appointmentId}/reject")
+    public ResponseEntity<Void> rejectAppointment(@PathVariable Long appointmentId) {
+        appointmentService.rejectAppointment(appointmentId);
+        return ResponseEntity.ok().build();
+    }
+	
 }

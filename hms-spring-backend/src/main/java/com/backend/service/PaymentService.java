@@ -17,6 +17,8 @@ public interface PaymentService {
 
     // Get all payments (receptionist/admin)
     List<PaymentRespDTO> getAllPayments();
+
+	byte[] generateReceipt(Long paymentId);
 }
 
 

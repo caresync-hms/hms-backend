@@ -94,7 +94,7 @@ public class PatientController {
 	
 	
 
-    // Get all payments of logged-in patient (by patientId)
+   
     @GetMapping("/{patientId}/payments")
     public ResponseEntity<List<PaymentRespDTO>> getPaymentsByPatient(
             @PathVariable Long patientId) {
@@ -104,7 +104,7 @@ public class PatientController {
         );
     }
 
-    // Patient pays an invoice
+   
     @PutMapping("/payments/{invoiceId}")
     public ResponseEntity<PaymentRespDTO> payInvoice(
             @PathVariable Long invoiceId) {
@@ -117,5 +117,20 @@ public class PatientController {
 
         return new ResponseEntity<>(payment, HttpStatus.OK);
     }
+    
+    @GetMapping("/payments/{paymentId}/receipt")
+    public ResponseEntity<byte[]> downloadReceipt(@PathVariable Long paymentId) {
+
+        byte[] pdf = paymentService.generateReceipt(paymentId);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/pdf")
+                .header(
+                    "Content-Disposition",
+                    "attachment; filename=receipt_" + paymentId + ".pdf"
+                )
+                .body(pdf);
+    }
+
 
 }

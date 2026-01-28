@@ -42,7 +42,7 @@ public class SecurityConfiguration {
 				.hasAnyRole("DOCTOR", "ADMIN").requestMatchers(HttpMethod.GET, "/patients").hasRole("ADMIN")
 				.requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
 				// Receptionist APIs
-				.requestMatchers("/receptionist/**").hasRole("RECEPTIONIST").requestMatchers("/patients/**")
+				.requestMatchers("/receptionist/**").hasAnyRole("RECEPTIONIST", "ADMIN").requestMatchers("/patients/**")
 				.hasRole("RECEPTIONIST").anyRequest().authenticated())
 				.addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);
 

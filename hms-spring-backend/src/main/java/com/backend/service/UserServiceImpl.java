@@ -12,6 +12,7 @@ import com.backend.dtos.ApiResponse;
 import com.backend.dtos.UpdateUserDTO;
 import com.backend.dtos.UserReqDTO;
 import com.backend.dtos.UserRespDTO;
+import com.backend.entity.Role;
 import com.backend.entity.Status;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
@@ -84,5 +85,11 @@ public class UserServiceImpl implements UserService {
 
 		user.setStatus(status);
 		userRepository.save(user);
+	}
+
+	@Override
+	public List<UserRespDTO> getUsersByRole(Role role) {
+
+		return userRepository.findByRole(role).stream().map(user -> modelMapper.map(user, UserRespDTO.class)).toList();
 	}
 }

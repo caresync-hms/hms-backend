@@ -24,6 +24,7 @@ import com.backend.dtos.StatusUpdateDTO;
 import com.backend.dtos.UpdateUserDTO;
 import com.backend.dtos.UserReqDTO;
 import com.backend.dtos.UserRespDTO;
+import com.backend.entity.Role;
 import com.backend.entity.User;
 import com.backend.security.JWTUtils;
 import com.backend.service.UserService;
@@ -72,6 +73,13 @@ public class UserController {
 
 		userService.updateUserStatus(id, dto.getStatus());
 		return ResponseEntity.noContent().build();
+	}
+
+	/* ---------- GET USERS BY ROLE ---------- */
+	@GetMapping("/role/{role}")
+	public ResponseEntity<List<UserRespDTO>> getUsersByRole(@PathVariable Role role) {
+
+		return ResponseEntity.ok(userService.getUsersByRole(role));
 	}
 
 	@GetMapping("/{userId}")

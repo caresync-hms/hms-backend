@@ -32,18 +32,8 @@ public class PatientServiceImpl implements PatientService {
 	private final ModelMapper modelMapper;
 
 	private final PasswordEncoder passwordEncoder;
-
-	@Override
-	public List<PatientRespDTO> getAllPatients() {
-		return patientRepository.findAll().stream().map(PatientRespDTO::new).toList();
-	}
-
-//	@Override
-//	public Optional<PatientDTO> getPatientDetailsByUserId(Long userId) {
-//
-//		return patientRepository.findByUser_Id(userId).map(PatientDTO::new);
-//	}
-
+    
+	
 	@Override
 	public PatientDTO addPatient(CreatePatientDTO dto) {
 
@@ -65,7 +55,9 @@ public class PatientServiceImpl implements PatientService {
 
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-		userRepository.save(user);
+		 userRepository.saveAndFlush(user);
+		 
+		 
 
 		/* -------- Create Patient -------- */
 		Patient patient = new Patient();
@@ -73,11 +65,59 @@ public class PatientServiceImpl implements PatientService {
 		patient.setBloodGroup(dto.getBloodGroup());
 		patient.setMedicalHistory(dto.getMedicalHistory());
 
-		patientRepository.save(patient);
+		 patientRepository.saveAndFlush(patient);
+		
 
 		return new PatientDTO(patient);
 	}
+	@Override
+	public PatientDTO addPatientReceptionist(CreatePatientDTO dto) {
 
+		/* -------- Email uniqueness check -------- */
+		if (userRepository.existsByEmail(dto.getEmail())) {
+			throw new RuntimeException("Email already exists");
+		}
+
+		/* -------- Create User -------- */
+		User user = new User();
+		user.setFirstname(dto.getFirstname());
+		user.setLastname(dto.getLastname());
+		user.setEmail(dto.getEmail());
+		user.setPhone(dto.getPhone());
+		user.setGender(dto.getGender());
+		user.setDob(dto.getDob());
+		user.setStatus(Status.ACTIVE);
+		user.setRole(Role.ROLE_PATIENT);
+
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+		 userRepository.saveAndFlush(user);
+		 
+		 
+
+		/* -------- Create Patient -------- */
+		Patient patient = new Patient();
+		patient.setUser(user);
+		patient.setBloodGroup(dto.getBloodGroup());
+		patient.setMedicalHistory(dto.getMedicalHistory());
+
+		 patientRepository.saveAndFlush(patient);
+		
+
+		return new PatientDTO(patient);
+	}
+	@Override
+	public List<PatientRespDTO> getAllPatients() {
+		return patientRepository.findAll().stream().map(PatientRespDTO::new).toList();
+	}
+
+//	@Override
+//	public Optional<PatientDTO> getPatientDetailsByUserId(Long userId) {
+//
+//		return patientRepository.findByUser_Id(userId).map(PatientDTO::new);
+//	}
+
+	
 	@Override
 	public PatientDTO updatePatient(Long patientId, UpdatePatientDTO dto) {
 
@@ -129,8 +169,8 @@ public class PatientServiceImpl implements PatientService {
 		return new PatientDTO(patient);
 	}
 	
-	@Override
-	public PatientDTO addPatientForExistingUser(ReceptionistPatientDTO dto) {
+	
+	/*public PatientDTO addPatientForExistingUser(ReceptionistPatientDTO dto) {
 
 	    User user = userRepository.findById(dto.getUserId())
 	            .orElseThrow(() -> new RuntimeException("User not found"));
@@ -147,7 +187,11 @@ public class PatientServiceImpl implements PatientService {
 	    patientRepository.save(patient);
 
 	    return new PatientDTO(patient);
+	}*/
+	
+
+	   
 	}
 
 
-}
+

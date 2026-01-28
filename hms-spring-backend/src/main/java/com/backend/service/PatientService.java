@@ -24,7 +24,9 @@ public interface PatientService {
 
 	void updateStatus(Long id, Status status);
 	
-	PatientDTO addPatientForExistingUser(ReceptionistPatientDTO dto);
+	//PatientDTO addPatientForExistingUser(ReceptionistPatientDTO dto);
+	
+	PatientDTO addPatientReceptionist(CreatePatientDTO dto);
 
 
 }

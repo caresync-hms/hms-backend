@@ -7,9 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend.dtos.ApiResponse;
+import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.InvoiceDTO;
 import com.backend.dtos.InvoiceRespDTO;
+import com.backend.dtos.PatientDTO;
 import com.backend.dtos.PatientReqDTO;
+import com.backend.dtos.PatientRespDTO;
 import com.backend.dtos.PaymentDTO;
 import com.backend.dtos.PaymentRespDTO;
 import com.backend.dtos.ReceptionistPatientDTO;
@@ -32,6 +35,23 @@ public class ReceptionistController {
 
 
     /* ===================== INVOICES ===================== */
+    
+    @GetMapping("/patients")
+    public List<PatientRespDTO> getAllPatients() {
+        return patientService.getAllPatients();
+    }
+    
+    @PostMapping("/patient")
+    public ResponseEntity<ApiResponse> createPatient(
+            @RequestBody CreatePatientDTO  dto) {
+    	 
+    			 PatientDTO patient = patientService.addPatientReceptionist(dto);
+
+    		    return ResponseEntity.ok(
+    		        new ApiResponse("Patient created successfully", "SUCCESS", patient)
+    		    );
+    	    
+    }
 
     // Create invoice for a patient
     @PostMapping("/invoices")
@@ -42,18 +62,7 @@ public class ReceptionistController {
         return new ResponseEntity<>(invoice, HttpStatus.CREATED);
     }
   
-    @PostMapping("/patient")
-    public ResponseEntity<ApiResponse> createPatient(
-            @RequestBody ReceptionistPatientDTO dto) {
-
-    	return ResponseEntity.ok(
-    	        new ApiResponse(
-    	            "Patient created successfully",
-    	            "SUCCESS",
-    	            patientService.addPatientForExistingUser(dto)
-    	        )
-    	    );
-    }
+   
 
 
 

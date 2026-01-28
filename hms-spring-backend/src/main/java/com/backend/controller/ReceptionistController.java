@@ -6,11 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.backend.dtos.ApiResponse;
 import com.backend.dtos.InvoiceDTO;
 import com.backend.dtos.InvoiceRespDTO;
+import com.backend.dtos.PatientReqDTO;
 import com.backend.dtos.PaymentDTO;
 import com.backend.dtos.PaymentRespDTO;
+import com.backend.dtos.ReceptionistPatientDTO;
 import com.backend.service.InvoiceService;
+import com.backend.service.PatientService;
 import com.backend.service.PaymentService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +28,8 @@ public class ReceptionistController {
 
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
+    private final PatientService patientService;
+
 
     /* ===================== INVOICES ===================== */
 
@@ -35,6 +41,21 @@ public class ReceptionistController {
         InvoiceRespDTO invoice = invoiceService.createInvoice(dto);
         return new ResponseEntity<>(invoice, HttpStatus.CREATED);
     }
+  
+    @PostMapping("/patient")
+    public ResponseEntity<ApiResponse> createPatient(
+            @RequestBody ReceptionistPatientDTO dto) {
+
+    	return ResponseEntity.ok(
+    	        new ApiResponse(
+    	            "Patient created successfully",
+    	            "SUCCESS",
+    	            patientService.addPatientForExistingUser(dto)
+    	        )
+    	    );
+    }
+
+
 
     // Get all invoices of a patient
     @GetMapping("/patients/{patientId}/invoices")

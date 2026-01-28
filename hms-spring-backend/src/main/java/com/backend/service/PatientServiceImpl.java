@@ -11,6 +11,7 @@ import com.backend.dtos.CreatePatientDTO;
 import com.backend.dtos.PatientDTO;
 import com.backend.dtos.PatientIdDTO;
 import com.backend.dtos.PatientRespDTO;
+import com.backend.dtos.ReceptionistPatientDTO;
 import com.backend.dtos.UpdatePatientDTO;
 import com.backend.entity.Patient;
 import com.backend.entity.Role;
@@ -127,5 +128,26 @@ public class PatientServiceImpl implements PatientService {
 
 		return new PatientDTO(patient);
 	}
+	
+	@Override
+	public PatientDTO addPatientForExistingUser(ReceptionistPatientDTO dto) {
+
+	    User user = userRepository.findById(dto.getUserId())
+	            .orElseThrow(() -> new RuntimeException("User not found"));
+
+	    if (patientRepository.existsByUser(user)) {
+	        throw new RuntimeException("Patient already exists for this user");
+	    }
+
+	    Patient patient = new Patient();
+	    patient.setUser(user);
+	    patient.setBloodGroup(dto.getBloodGroup());
+	    patient.setMedicalHistory(dto.getMedicalHistory());
+
+	    patientRepository.save(patient);
+
+	    return new PatientDTO(patient);
+	}
+
 
 }

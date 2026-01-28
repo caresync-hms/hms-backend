@@ -14,6 +14,8 @@ import com.backend.entity.User;
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
 	Optional<Patient> findByUserId(Long userId);
+	
+	  boolean existsByUser(User user);
 
 	@Query("""
 			    SELECT DISTINCT a.patient

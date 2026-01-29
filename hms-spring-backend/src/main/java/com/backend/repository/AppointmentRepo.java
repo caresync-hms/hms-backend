@@ -127,6 +127,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 
 	@Query("""
 			    SELECT new com.backend.dtos.AppointmentResponseDto(
+			    	a.id,
 			        a.dateOfAppointment,
 			        a.status,
 			        CONCAT(u.firstname, ' ', u.lastname),
@@ -140,36 +141,58 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 			""")
 	List<AppointmentResponseDto> findAppointmentsByDoctorId(@Param("doctorId") Long doctorId);
 
-	@Query("""
-			    SELECT new com.backend.dtos.PatientByDoctorDto(
-			        p.id,
-			        u.firstname,
-			        u.lastname,
-			        u.phone,
-			        u.gender,
-			        a.dateOfAppointment,
-			        a.status
-			    )
-			    FROM Appointment a
-			    JOIN a.patient p
-			    JOIN p.user u
-			    WHERE a.doctor.id = :doctorId
-			""")
-	List<PatientByDoctorDto> getPatientsByDoctorId(@Param("doctorId") Long doctorId);
+//	@Query("""
+//			    SELECT new com.backend.dtos.PatientByDoctorDto(
+//			        p.id,
+//			        u.firstname,
+//			        u.lastname,
+//			        u.phone,
+//			        u.gender,
+//			        a.dateOfAppointment,
+//			        a.status
+//			    )
+//			    FROM Appointment a
+//			    JOIN a.patient p
+//			    JOIN p.user u
+//			    WHERE a.doctor.id = :doctorId
+//			""")
+//	List<PatientByDoctorDto> getPatientsByDoctorId(@Param("doctorId") Long doctorId);
 
+	 @Query("""
+		        SELECT DISTINCT new com.backend.dtos.PatientByDoctorDto(
+		            u.firstname || ' ' || u.lastname,
+		            u.gender,
+		            u.dob,
+		            u.phone,
+		            u.address,
+		            p.medicalHistory,
+		            p.admitDate,
+		            p.dischargeDate
+		        )
+		        FROM Appointment a
+		        JOIN a.patient p
+		        JOIN p.user u
+		        WHERE a.doctor.id = :doctorId
+		    """)
+		    List<PatientByDoctorDto> getPatientsByDoctorId(@Param("doctorId") Long doctorId);
+	
+	
 	@Query("""
-			    SELECT new com.backend.dtos.AppointmentByPatientDto(
-			        CONCAT(d.user.firstname, ' ', d.user.lastname),
-			        d.specialization,
-			        a.dateOfAppointment,
-			        a.status
-			    )
-			    FROM Appointment a
-			    JOIN a.doctor d
-			    JOIN a.patient p
-			    WHERE p.id = :patientId
-			""")
-	List<AppointmentByPatientDto> getAppointmentsByPatientId(@Param("patientId") Long patientId);
+		    SELECT new com.backend.dtos.AppointmentByPatientDto(
+		        a.id,
+		        CONCAT(d.user.firstname, ' ', d.user.lastname),
+		        d.specialization,
+		        a.dateOfAppointment,
+		        a.status
+		    )
+		    FROM Appointment a
+		    JOIN a.doctor d
+		    JOIN a.patient p
+		    WHERE p.id = :patientId
+		""")
+		List<AppointmentByPatientDto> getAppointmentsByPatientId(
+		    @Param("patientId") Long patientId
+		);
 
 	boolean existsByDoctor_IdAndDateOfAppointment(Long doctorId, LocalDateTime dateOfAppointment);
 
@@ -188,4 +211,8 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 			    JOIN a.patient p
 			""")
 	List<AdminAppointmentDTO> findAllAdminAppointments();
+	
+	
+
+
 }

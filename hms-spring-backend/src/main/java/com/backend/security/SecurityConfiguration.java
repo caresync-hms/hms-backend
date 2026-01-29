@@ -37,10 +37,13 @@ public class SecurityConfiguration {
 				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users/signin", "/patient/register", "/doctors",
 						"/users/pwd-encryption")
 				.permitAll().requestMatchers(HttpMethod.OPTIONS).permitAll()
-				.requestMatchers(HttpMethod.POST, "/appointments/book").hasRole("PATIENT")
+				.requestMatchers(HttpMethod.POST, "/appointments/book").hasAnyRole("PATIENT", "RECEPTIONIST")
 				.requestMatchers("/appointments/doctors/{userId}/upcoming", "/doctors/{userId}")
 				.hasAnyRole("DOCTOR", "ADMIN").requestMatchers(HttpMethod.GET, "/patients").hasRole("ADMIN")
-				.anyRequest().authenticated())
+				.requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
+				// Receptionist APIs
+				.requestMatchers("/receptionist/**").hasAnyRole("RECEPTIONIST", "ADMIN").requestMatchers("/patients/**")
+				.hasRole("RECEPTIONIST").anyRequest().authenticated())
 				.addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 		// enable Basic Auth scheme

@@ -20,4 +20,5 @@ public interface DoctorService {
 
 	DoctorDTO updateDoctor(Long doctorId, UpdateDoctorDTO dto);
 
+	DoctorDTO getDoctorByUserId(Long userId);
 }

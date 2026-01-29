@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,15 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.custom_exceptions.InvalidInputException;
 import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResp;
+import com.backend.dtos.StatusUpdateDTO;
+import com.backend.dtos.UpdateUserDTO;
+import com.backend.dtos.UserReqDTO;
 import com.backend.dtos.UserRespDTO;
+import com.backend.entity.Role;
 import com.backend.entity.User;
 import com.backend.security.JWTUtils;
 import com.backend.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,16 +50,42 @@ public class UserController {
 		System.out.println("in get all users");
 		List<UserRespDTO> users = userService.getAllUsers();
 		if (users.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT) // SC 204
-					.build();
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}
 		return ResponseEntity.ok(users);
+	}
+
+	@PostMapping
+	public ResponseEntity<?> addUser(@RequestBody UserReqDTO dto) {
+		return ResponseEntity.ok(userService.addUser(dto));
+	}
+
+	/* ---------- UPDATE USER ---------- */
+	@PutMapping("/{id}")
+	public ResponseEntity<UserRespDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO dto) {
+
+		return ResponseEntity.ok(userService.updateUser(id, dto));
+	}
+
+	/* ---------- UPDATE STATUS ---------- */
+	@PatchMapping("/{id}/status")
+	public ResponseEntity<Void> updateUserStatus(@PathVariable Long id, @RequestBody StatusUpdateDTO dto) {
+
+		userService.updateUserStatus(id, dto.getStatus());
+		return ResponseEntity.noContent().build();
+	}
+
+	/* ---------- GET USERS BY ROLE ---------- */
+	@GetMapping("/role/{role}")
+	public ResponseEntity<List<UserRespDTO>> getUsersByRole(@PathVariable Role role) {
+
+		return ResponseEntity.ok(userService.getUsersByRole(role));
 	}
 
 	@GetMapping("/{userId}")
 
 	@Operation(description = "Get user details by id ")
-	public ResponseEntity<?> getUserDetailsById(@PathVariable @Min(1) @Max(100) Long userId) {
+	public ResponseEntity<?> getUserDetailsById(@PathVariable Long userId) {
 		System.out.println("in get user dtls " + userId);
 
 		return ResponseEntity.ok(userService.getUserDetails(userId));

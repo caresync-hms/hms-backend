@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/appointments")
 @RequiredArgsConstructor
+
 public class AppointmentController {
 
 	private final AppointmentService appointmentService;
@@ -41,6 +42,7 @@ public class AppointmentController {
 
 	@PostMapping("/book")
 	public ResponseEntity<?> bookAppointment(@RequestBody AppointmentBookingRequestDto dto) {
+
 		try {
 			AppointmentBookingDto response = appointmentService.bookAppointment(dto);
 			return ResponseEntity.ok(response);
@@ -73,6 +75,20 @@ public class AppointmentController {
 	public ResponseEntity<List<AppointmentResponseDto>> getAppointmentsByDoctorId(@PathVariable Long doctorId) {
 
 		return ResponseEntity.ok(appointmentService.getAppointmentsByDoctorId(doctorId));
+	}
+
+	// Accept appointment
+	@PutMapping("/{appointmentId}/accept")
+	public ResponseEntity<Void> acceptAppointment(@PathVariable Long appointmentId) {
+		appointmentService.acceptAppointment(appointmentId);
+		return ResponseEntity.ok().build();
+	}
+
+	// Reject appointment
+	@PutMapping("/{appointmentId}/reject")
+	public ResponseEntity<Void> rejectAppointment(@PathVariable Long appointmentId) {
+		appointmentService.rejectAppointment(appointmentId);
+		return ResponseEntity.ok().build();
 	}
 
 }

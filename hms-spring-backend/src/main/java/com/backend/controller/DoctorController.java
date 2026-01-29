@@ -36,7 +36,7 @@ public class DoctorController {
 		return ResponseEntity.ok(doctorService.getDoctorById(doctorId));
 	}
 
-	@GetMapping("/{id}/patients")
+	@GetMapping("/{doctorId}/patient")
 	public ResponseEntity<List<PatientByDoctorDto>> getPatientsByDoctorId(@PathVariable Long doctorId) {
 
 		return ResponseEntity.ok(appointmentService.getPatientsByDoctorId(doctorId));
@@ -62,6 +62,12 @@ public class DoctorController {
 
 		doctorService.updateDoctorStatus(id, dto.getStatus());
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<DoctorDTO> getDoctorByUserId(@PathVariable Long userId) {
+
+		return ResponseEntity.ok(doctorService.getDoctorByUserId(userId));
 	}
 
 }

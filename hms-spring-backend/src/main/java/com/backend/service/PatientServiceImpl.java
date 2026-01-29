@@ -1,7 +1,6 @@
 package com.backend.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,12 +34,6 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public List<PatientRespDTO> getAllPatients() {
 		return patientRepository.findAll().stream().map(PatientRespDTO::new).toList();
-	}
-
-	@Override
-	public Optional<PatientDTO> getPatientDetailsByUserId(Long userId) {
-
-		return patientRepository.findByUser_Id(userId).map(PatientDTO::new);
 	}
 
 	@Override
@@ -118,6 +111,14 @@ public class PatientServiceImpl implements PatientService {
 
 		user.setStatus(status);
 
+	}
+
+	public PatientDTO getPatientByUserId(Long userId) {
+
+		Patient patient = patientRepository.findByUserId(userId)
+				.orElseThrow(() -> new RuntimeException("Patient not found for userId: " + userId));
+
+		return new PatientDTO(patient);
 	}
 
 }

@@ -115,4 +115,13 @@ public class DoctorServiceImpl implements DoctorService {
 		return new DoctorDTO(doctor);
 	}
 
+	@Override
+	public DoctorDTO getDoctorByUserId(Long userId) {
+
+		Doctor doctor = doctorRepository.findByUserId(userId)
+				.orElseThrow(() -> new RuntimeException("Doctor not found for userId: " + userId));
+
+		return new DoctorDTO(doctor);
+	}
+
 }

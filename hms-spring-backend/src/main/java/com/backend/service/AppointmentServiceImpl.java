@@ -208,7 +208,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		appointment.setDoctor(doctor);
 		appointment.setPatient(patient);
 		appointment.setDateOfAppointment(dto.getDateOfAppointment());
-		appointment.setStatus(AppointmentStatus.SCHEDULED);
+		appointment.setStatus(AppointmentStatus.PENDING);
 
 		Appointment saved = appointmentRepository.save(appointment);
 
@@ -272,5 +272,23 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 		// ✅ Fetch appointments
 		return appointmentRepository.findAppointmentsByDoctorId(doctor.getId());
+	}
+
+	@Override
+	public void acceptAppointment(Long appointmentId) {
+		Appointment appointment = appointmentRepository.findById(appointmentId)
+				.orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+		appointment.setStatus(AppointmentStatus.SCHEDULED);
+		appointmentRepository.save(appointment);
+	}
+
+	@Override
+	public void rejectAppointment(Long appointmentId) {
+		Appointment appointment = appointmentRepository.findById(appointmentId)
+				.orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+		appointment.setStatus(AppointmentStatus.CANCELLED);
+		appointmentRepository.save(appointment);
 	}
 }

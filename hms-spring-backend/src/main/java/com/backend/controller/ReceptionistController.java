@@ -2,15 +2,21 @@ package com.backend.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.backend.dtos.ApiResponse;
 import com.backend.dtos.InvoiceDTO;
 import com.backend.dtos.InvoiceRespDTO;
+import com.backend.dtos.PatientRespDTO;
 import com.backend.dtos.PaymentDTO;
 import com.backend.dtos.PaymentRespDTO;
+import com.backend.entity.InvoiceStatus;
 import com.backend.service.InvoiceService;
+import com.backend.service.PatientService;
 import com.backend.service.PaymentService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,10 +30,30 @@ public class ReceptionistController {
 
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
+    private final PatientService patientService;
 
     /* ===================== INVOICES ===================== */
 
     // Create invoice for a patient
+    @PutMapping("/invoices/{invoiceId}/status")
+    public ResponseEntity<InvoiceRespDTO> updateInvoiceStatus(
+            @PathVariable Long invoiceId,
+            @RequestParam InvoiceStatus status) {
+
+        InvoiceRespDTO updatedInvoice =
+                invoiceService.updateStatus(invoiceId, status);
+
+        return ResponseEntity.ok(updatedInvoice);
+    }
+
+
+    
+    @GetMapping("/patients")
+    public ResponseEntity<List<PatientRespDTO>> getAllPatientsForReceptionist() {
+
+        return ResponseEntity.ok( patientService.getAllPatients());
+    }
+    
     @PostMapping("/invoices")
     public ResponseEntity<InvoiceRespDTO> createInvoice(
             @RequestBody InvoiceDTO dto) {
@@ -58,7 +84,7 @@ public class ReceptionistController {
     @PostMapping("/payments")
     public ResponseEntity<PaymentRespDTO> makePayment(
             @RequestBody PaymentDTO dto) {
-
+    	System.out.println("DTO RECEIVED: " + dto.getPaymentMethod());
         PaymentRespDTO payment = paymentService.makePayment(dto);
         return new ResponseEntity<>(payment, HttpStatus.CREATED);
     }
@@ -78,6 +104,20 @@ public class ReceptionistController {
     public ResponseEntity<List<PaymentRespDTO>> getAllPayments() {
         return ResponseEntity.ok(paymentService.getAllPayments());
     }
+    @GetMapping(value = "/payments/{paymentId}/receipt", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> downloadReceipt(@PathVariable Long paymentId) {
+
+        byte[] pdf = paymentService.generateReceipt(paymentId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=payment_" + paymentId + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
+
+
 }
 
 

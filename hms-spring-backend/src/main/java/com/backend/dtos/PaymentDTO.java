@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 	public class PaymentDTO {
     private Long invoiceId;
-	  
+    private Long patientId;
 	    private BigDecimal amount;
 	    private PaymentMethod paymentMethod;
 	}

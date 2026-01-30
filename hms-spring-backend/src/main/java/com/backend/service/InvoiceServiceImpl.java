@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.backend.custom_exceptions.ResourceNotFoundException;
 import com.backend.dtos.InvoiceDTO;
 import com.backend.dtos.InvoiceRespDTO;
 import com.backend.entity.Invoice;
@@ -80,6 +81,31 @@ public class InvoiceServiceImpl implements InvoiceService {
                 inv.getCreatedDate()
         );
     }
+    
+    @Override
+    public InvoiceRespDTO updateStatus(Long invoiceId, InvoiceStatus status) {
+
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Invoice not found with id: " + invoiceId
+                        )
+                );
+
+        invoice.setStatus(status);
+
+        // optional: auto set paid date
+        if (status == InvoiceStatus.PAID) {
+            invoice.setCreatedDate(LocalDate.now());
+        }
+
+        Invoice savedInvoice = invoiceRepository.save(invoice);
+
+        return mapToDTO(savedInvoice);
+    }
+   
+
+
 }
 
 

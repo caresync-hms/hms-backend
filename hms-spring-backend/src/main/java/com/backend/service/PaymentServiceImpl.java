@@ -130,7 +130,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentRespDTO makePayment(PaymentDTO dto) {
-
+    	System.out.println("INVOICE ID = " + dto.getInvoiceId());
+    	System.out.println("AMOUNT = " + dto.getAmount());
+    	System.out.println("PAYMENT METHOD = " + dto.getPaymentMethod());
         if (dto.getInvoiceId() == null) {
             throw new IllegalArgumentException("Invoice ID must not be null");
         }
@@ -144,11 +146,16 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("Invoice already paid");
         }
 
-       
+     // 3️⃣ GET PATIENT FROM INVOICE ✅
+        var patient = invoice.getPatient();
+        if (patient == null) {
+            throw new RuntimeException("Invoice has no patient linked");
+        }
 
         // 4️⃣ Create payment
         Payment payment = new Payment();
         payment.setInvoice(invoice);
+        payment.setPatient(patient);
         payment.setAmount(dto.getAmount());
         payment.setPaymentMethod(dto.getPaymentMethod());
         payment.setPaymentDate(LocalDate.now());

@@ -18,6 +18,7 @@ jobs:
 
       - name: Build & Push
         run: |
+	  cd /hms-spring-backend/
           mvn clean package -DskipTests
           docker build -t prathamaher/hms-backend:latest .
           docker push prathamaher/hms-backend:latest

@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 	    private BigDecimal amount;
 
 	    @Enumerated(EnumType.STRING)
-	    @Column(nullable = false)
+	    @Column(name = "payment_method",nullable = false)
 	    private PaymentMethod paymentMethod;
 
 	    @Column(nullable = false)

@@ -38,5 +38,9 @@ public class Patient extends Base {
 	private LocalDateTime admitDate;
 	@Column(name = "discharge_Date")
 	private LocalDateTime dischargeDate;
+	
+	@OneToOne(mappedBy = "patient")
+	private Bed bed;
+
 
 }

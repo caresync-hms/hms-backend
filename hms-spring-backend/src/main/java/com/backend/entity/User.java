@@ -63,11 +63,6 @@ public class User extends Base implements UserDetails {
 	@Column(nullable = false)
 	private Status status;
 
-	/*
-	 * @PrePersist protected void setDefaults() { if (this.role == null) { this.role
-	 * = Role.PATIENT; } if (this.status == null) { this.status = Status.ACTIVE; } }
-	 */
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -84,4 +79,5 @@ public class User extends Base implements UserDetails {
 	public boolean isEnabled() {
 		return this.status == Status.ACTIVE;
 	}
+
 }

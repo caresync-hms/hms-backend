@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AppointmentStatusUpdateDto {
-    private AppointmentStatus status; // Only ACCEPTED or REJECTED
+    private AppointmentStatus status; 
 }
 

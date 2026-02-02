@@ -1,16 +1,11 @@
 package com.backend.service;
 
-
-
 import java.util.List;
 
 import com.backend.dtos.InvoiceDTO;
 import com.backend.dtos.InvoiceRespDTO;
 import com.backend.entity.Invoice;
 import com.backend.entity.InvoiceStatus;
-
-
-
 
 
 public interface InvoiceService {

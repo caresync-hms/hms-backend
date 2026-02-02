@@ -12,7 +12,6 @@ import com.backend.entity.Prescription;
 
 public interface PrescriptionRepository extends JpaRepository<Prescription, Long> {
 
-	/* -------------------- READ APIs (DTO PROJECTIONS) -------------------- */
 
 	@Query("""
 			SELECT new com.backend.dtos.PrescriptionRespDTO(

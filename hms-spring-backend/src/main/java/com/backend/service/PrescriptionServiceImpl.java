@@ -29,7 +29,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 	private final AppointmentRepo appointmentRepository;
 	private final DoctorRepository doctorRepository;
 
-	/* -------------------- CREATE -------------------- */
+
 
 	@Override
 	public PrescriptionRespDTO createPrescription(PrescriptionReqDTO dto) {
@@ -53,11 +53,11 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
 		prescriptionRepository.save(prescription);
 
-		// Return DTO via projection (NOT entity)
+		
 		return prescriptionRepository.findDtoById(prescription.getId()).orElseThrow();
 	}
 
-	/* -------------------- READ -------------------- */
+
 
 	@Override
 	public PrescriptionRespDTO getPrescriptionById(Long id) {
@@ -84,7 +84,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 		return prescriptionRepository.findDtosByAppointmentId(appointmentId);
 	}
 
-	/* -------------------- UPDATE -------------------- */
+	
 
 	@Override
 	public PrescriptionRespDTO updatePrescription(Long id, PrescriptionUpdateDTO dto) {
@@ -100,7 +100,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 		return prescriptionRepository.findDtoById(id).orElseThrow();
 	}
 
-	/* -------------------- DELETE -------------------- */
+	
 
 	@Override
 	public void deletePrescription(Long id) {

@@ -7,7 +7,7 @@ It handles authentication, authorization, role-based access control, and all hos
 
 The backend is designed following layered architecture and best practices to ensure scalability, security, and maintainability.
 
----
+
 
 ## 🚀 Backend Overview
 
@@ -28,7 +28,7 @@ It exposes REST APIs consumed by the React frontend.
 - Database interaction using Spring Data JPA  
 - Secure communication with frontend  
 
----
+
 
 ## 🛠️ Technologies Used
 
@@ -41,7 +41,7 @@ It exposes REST APIs consumed by the React frontend.
 - Maven  
 - RESTful APIs  
 
----
+
 
 ## ✨ Key Features
 
@@ -52,7 +52,7 @@ It exposes REST APIs consumed by the React frontend.
 - Clean layered architecture  
 - Database persistence using JPA & Hibernate  
 
----
+
 
 ## 👥 Roles & Responsibilities
 

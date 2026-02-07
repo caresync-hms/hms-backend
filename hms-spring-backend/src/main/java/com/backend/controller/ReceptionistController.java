@@ -9,15 +9,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend.dtos.ApiResponse;
+import com.backend.dtos.AssignBedDTO;
+import com.backend.dtos.BedDTO;
+import com.backend.dtos.BedRespDTO;
 import com.backend.dtos.InvoiceDTO;
 import com.backend.dtos.InvoiceRespDTO;
 import com.backend.dtos.PatientRespDTO;
 import com.backend.dtos.PaymentDTO;
 import com.backend.dtos.PaymentRespDTO;
+import com.backend.dtos.WardDTO;
 import com.backend.entity.InvoiceStatus;
+import com.backend.service.BedService;
 import com.backend.service.InvoiceService;
 import com.backend.service.PatientService;
 import com.backend.service.PaymentService;
+import com.backend.service.WardService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +37,9 @@ public class ReceptionistController {
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
     private final PatientService patientService;
+	private final BedService bedService;
+	 private final WardService wardService;
+	    
 
     /* ===================== INVOICES ===================== */
 
@@ -117,7 +126,29 @@ public class ReceptionistController {
     }
 
 
+  
+    
+   
 
+    // ✅ GET ALL WARDS
+    @GetMapping("/wards")
+    public List<WardDTO> getAllWards() {
+        return wardService.getAllWards();
+    }
+
+    // ✅ GET BEDS BY WARD
+    @GetMapping("/wards/{wardId}/beds")
+    public List<BedRespDTO> getBedsByWard(@PathVariable Long wardId) {
+        return bedService.getBedsByWard(wardId);
+    }
+
+    // ✅ ASSIGN BED
+    @PostMapping("/assign-bed")
+    public ResponseEntity<String> assignBed(@RequestBody AssignBedDTO dto) {
+        bedService.assignBedToPatient(dto);
+        return ResponseEntity.ok("Bed assigned successfully");
+    }
+    
 }
 
 

@@ -70,7 +70,7 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public DoctorDTO addDoctor(AddDoctorDTO dto) {
 
-		// 1️ Create User with hashed password
+		
 		User user = User.builder().firstname(dto.getFirstname()).lastname(dto.getLastname()).email(dto.getEmail())
 				.phone(dto.getPhone()).gender(dto.getGender()).dob(dto.getDob())
 				.password(passwordEncoder.encode(dto.getPassword()))
@@ -78,11 +78,11 @@ public class DoctorServiceImpl implements DoctorService {
 
 		userRepository.save(user);
 
-		// 2️ fetch Department by name
+		
 		Department department = departmentRepository.findByDepartmentName(dto.getDepartmentName())
 				.orElseThrow(() -> new RuntimeException("Department not found: " + dto.getDepartmentName()));
 
-		// 3️ Create Doctor
+		
 		Doctor doctor = Doctor.builder().user(user).specialization(dto.getSpecialization()).dept(department).build();
 
 		doctorRepository.save(doctor);
@@ -95,14 +95,13 @@ public class DoctorServiceImpl implements DoctorService {
 
 		Doctor doctor = doctorRepository.findById(doctorId).orElseThrow(() -> new RuntimeException("Doctor not found"));
 
-		/* -------- Update Doctor fields -------- */
+		
 		doctor.setSpecialization(dto.getSpecialization());
 
 		Department department = departmentRepository.findByDepartmentName(dto.getDepartmentName())
 				.orElseThrow(() -> new RuntimeException("Department not found: " + dto.getDepartmentName()));
 		doctor.setDept(department);
 
-		/* -------- Update User fields -------- */
 		User user = doctor.getUser();
 		user.setFirstname(dto.getFirstname());
 		user.setLastname(dto.getLastname());
@@ -111,7 +110,7 @@ public class DoctorServiceImpl implements DoctorService {
 		user.setDob(dto.getDob());
 		user.setStatus(dto.getStatus());
 
-		// JPA dirty checking → auto update
+		
 		return new DoctorDTO(doctor);
 	}
 
